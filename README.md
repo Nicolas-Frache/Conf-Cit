@@ -16,8 +16,11 @@ Gérald Oster <<gerald.oster@telecomnancy.eu>>
 
 ## Description du projet
 
-À compléter
-
+Création d'une application de conférence de citoyens :
+La municipalité peut créer des questionnaires en incluant éventuellement des formations.
+Ces questionnaires sont envoyés à un certain nombre de citoyens tirés au sort dans une base de donnée (éventuellement selon des critères).
+Ils peuvent alors y répondre.
+Cela permettera d'interroger rapidement l'opinon publique à propos de sujets variés.
 
 ### Convention pour les message de commits
 
