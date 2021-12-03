@@ -1,0 +1,52 @@
+html {
+
+}
+
+body {
+    background-color: rgb(41, 112, 132);
+	font-family: Verdana, sans-serif;
+}
+
+#content {
+    margin-left:100px;
+    margin-right:100px;
+}
+
+p {
+    font-family: 'Roboto';
+    font-size: 2em;
+    text-align: left;
+    color: white;
+}
+
+.red {
+    background-color: red;
+}
+
+img {
+    width: 150px;
+    border-radius: 12px;
+    -float: top;
+}
+
+.box_btn {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+}
+
+.btn {
+    background-color: white;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 6px 6px 20px 4px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    outline: none;
+    font-size: 2.5em;
+    padding: 20px;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    transform: scale(1.03);
+}

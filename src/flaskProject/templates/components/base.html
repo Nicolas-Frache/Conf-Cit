@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" type="text/css" 
+    href= "{{ url_for('static', filename='style.css') }}" />
+<head>
+    <title>
+       Conf-Cit
+    </title>
+</head>
+<body>
+    <h1>
+        {% block title %} 
+            Conf-Cit - Titre pas défaut
+        {% endblock %}
+    </h1>
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>
