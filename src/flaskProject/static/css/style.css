@@ -3,7 +3,8 @@ html {
 }
 
 body {
-    background-color: rgb(41, 112, 132);
+    -background-color: rgb(41, 112, 132);
+    background-color: rgb(34, 96, 113);
 	font-family: Verdana, sans-serif;
 }
 
@@ -14,7 +15,7 @@ body {
 
 p {
     font-family: 'Roboto';
-    font-size: 2em;
+    font-size: 1.6em;
     text-align: left;
     color: white;
 }
@@ -42,11 +43,35 @@ img {
     box-shadow: 6px 6px 20px 4px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     outline: none;
-    font-size: 2.5em;
+    font-size: 1.6em;
     padding: 20px;
     transition: 0.2s;
 }
 
 .btn:hover {
     transform: scale(1.03);
+}
+
+.data_tab {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    min-width: 300px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    color: white;
+    text-align: left;
+}
+
+.data_tab thead{
+    background-color: rgb(13, 84, 99);
+}
+
+.data_tab tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+.data_tab tbody tr td {
+    padding: 12px 15px;
 }
