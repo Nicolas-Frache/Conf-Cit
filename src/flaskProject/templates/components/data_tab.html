@@ -1,0 +1,19 @@
+<!-- Ce component attend un argument date de type "liste de dictionnaires" -->
+<table class="data_tab">
+    <thead>
+        <tr>
+            {% for key in data[0].keys() %}
+                <th> {{ key }} </th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for dico in data %}
+            <tr>
+                {% for key in dico.keys() %}
+                    <td> {{ dico[key] }} </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

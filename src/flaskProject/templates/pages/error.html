@@ -1,0 +1,15 @@
+<!-- Prend en paramètre optionnel error:'description de l'erreur' -->
+{%extends "components/base.html" %}
+
+{% block title %}
+    Conf-Cit - Page d'erreur
+{% endblock %}
+
+{% block content %}
+    <p>Une erreur s'est produite, contactez un administrateur</p>
+    {% if error is defined %}
+        <p><u>Description de l'erreur:</u> {{ error }}</p>
+    {% endif %}
+{% endblock %}
+
+
