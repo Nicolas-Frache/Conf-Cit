@@ -1,0 +1,22 @@
+<div class="header">
+    <div class="headerContent">
+        <div class="leftHeader">Conf-Cit</div>
+        <div class="rightHeader">
+            <div class="logText">
+                {% if header.is_logged %}
+                    Connecté en tant que : {{ header.username }}
+                {% else %}
+                    Visiteur anonyme
+                {% endif %}
+            </div>
+            {% if header.is_logged %}
+                <div class="log_box">
+                    <a title="Se déconnecter" href="{{ url_for("se_deconnecter") }}?redirect={{ url_for(request.endpoint) }}">
+                        <img src="{{ url_for('static', filename='icons/power.svg') }}">
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>

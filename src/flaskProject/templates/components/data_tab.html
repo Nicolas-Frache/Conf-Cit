@@ -1,4 +1,7 @@
 <!-- Ce component attend un argument date de type "liste de dictionnaires" -->
+{% block css %}
+    <link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename='css/data_tab.css') }}" />
+{% endblock %}
 <table class="data_tab">
     <thead>
         <tr>

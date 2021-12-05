@@ -1,12 +1,12 @@
 {%extends "components/base.html" %}
 
 {% block title %}
-    Conf-Cit - LISTE CITOYENS
+    LISTE CITOYENS
 {% endblock %}
 
 {% block content %}
     {% with data=data_tab %}
-            <p>Liste des citoyens dans la base de données: </p>
-            {% include 'components/data_tab.html' %}
+        <p>Liste des citoyens dans la base de données: </p>
+        {% include 'components/data_tab.html' %}
     {% endwith %}
 {% endblock %}
