@@ -1,0 +1,26 @@
+{%extends "components/base.html" %}
+
+{% block title %}
+    Page de connexion
+{% endblock %}
+
+{% block content %}
+    <p>Merci de vous identifier en remplissant les champs ci-dessous: </p>
+    {% if error is defined %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+    {% if sucess is defined %}
+        <p class="sucess">{{ sucess }}</p>
+    {% endif %}
+    <div class=form>
+        <form method="post" enctype="multipart/form-data" action="{{url_for("se_connecter_post")}}?redirect={{redirect}}">
+            <h3 class="champ">Nom</h3>
+            <input type="text" name="nom" id="champ" class="longInput" {% if is_disabled %} disabled {% endif %}>
+
+            <h3 class="champ">Mot de passe</h3>
+            <input type="text" id="champ" class="longInput" name="mdp" required="" {% if is_disabled %} disabled {% endif %}>
+
+            <p class="center"><input type="submit" value="Se connecter" {% if is_disabled %} disabled {% endif %}></p>
+        </form>
+    </div>
+{% endblock %}

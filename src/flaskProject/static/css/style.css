@@ -3,7 +3,6 @@ html {
 }
 
 body {
-    -background-color: rgb(41, 112, 132);
     background-color: rgb(34, 96, 113);
 	font-family: Verdana, sans-serif;
     color: white;
@@ -21,15 +20,53 @@ p {
     color: white;
 }
 
-.red {
-    background-color: red;
-}
+.red {background-color: red;}
 
 img {
     width: 150px;
     border-radius: 12px;
     -float: top;
 }
+
+.error{
+    color: red;
+    margin-left: 50px;
+}
+
+.sucess{
+    color: #00ca16;
+    margin-left: 50px;
+}
+
+.form {
+    border: 2px solid white;
+    width: 40%;
+    padding-left: 7px;
+    margin: 2%;
+    border-radius: 5px;
+}
+
+.form h3 {
+    margin: 10px;
+    font-size: 1.8em;
+}
+
+.longInput {width: 90%;}
+
+input {
+    background-color: white;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 6px 6px 20px 4px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    outline: none;
+    font-size: 1.3em;
+    padding: 13px;
+    margin: 5px;
+    transition: 0.2s;
+}
+
+.center {text-align: center;}
 
 .box_btn {
 	align-items: center;
@@ -49,8 +86,6 @@ img {
     transition: 0.2s;
 }
 
-.btn:hover {
-    transform: scale(1.03);
-}
+.btn:hover {transform: scale(1.03);}
 
 

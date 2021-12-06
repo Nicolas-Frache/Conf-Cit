@@ -22,6 +22,8 @@
     font-family: Barlow-sc,Arial,Helvetica,sans-serif;
     display: flex;
     flex-direction: row;
+    margin-right: 5%;
+    font-size: 1.3em;
 }
 
 .logText {
@@ -31,7 +33,6 @@
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
     -border: 1px solid black;
-    font-size: 1.3em;
     padding: 4px;
     box-shadow: 0px 0px 5px 1px #414141;
 
@@ -46,6 +47,11 @@
     transform: translateY(-50%);
     box-shadow: 0px 0px 5px 1px #414141;
     height: fit-content;
+}
+
+.rightHeader .box_btn .btn {
+    font-size: 1.3em;
+    padding: 2px;
 }
 
 .log_box:hover {box-shadow: 0px 0px 5px 1px yellow;}

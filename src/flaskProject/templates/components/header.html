@@ -11,9 +11,19 @@
             </div>
             {% if header.is_logged %}
                 <div class="log_box">
-                    <a title="Se déconnecter" href="{{ url_for("se_deconnecter") }}?redirect={{ url_for(request.endpoint) }}">
+                    <a title="Se déconnecter"
+                       href="{{ url_for("se_deconnecter") }}?redirect={{ url_for(request.endpoint) }}">
                         <img src="{{ url_for('static', filename='icons/power.svg') }}">
                     </a>
+                </div>
+            {% else %}
+                <div class="log_box">
+                    <form action="{{ url_for('se_connecter_get') }}" method="get">
+                        <div class="box_btn">
+                            <button class="btn" type="submit">S'identifier</button>
+                        </div>
+                        <input type="hidden" name="redirect" value="{{ url_for(request.endpoint) }}" />
+                    </form>
                 </div>
             {% endif %}
         </div>

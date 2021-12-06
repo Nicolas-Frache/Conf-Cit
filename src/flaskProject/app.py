@@ -3,12 +3,12 @@ from flask import *
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
+app.secret_key = "secret"
 
 
 def connect_database(getdict=False):
     args = {"host": "localhost",
             "user": "flask",
-            "host": "localhost",
             "password": "flask",
             "db": "confcit"
             }
@@ -47,6 +47,7 @@ def lister_citoyens():
     return render_template("pages/listeCitoyens.html", data_tab=data, header=get_header())
 
 
+# Page pour faire des tests
 @app.route('/sandbox')
 def sandbox():
     compteur = request.cookies.get("compteur")
@@ -59,11 +60,39 @@ def sandbox():
     return resp
 
 
-@app.route("/seDeconnecter")
+@app.route("/deconnexion")
 def se_deconnecter():
     newUrl = request.args.get("redirect", default="/")
     resp = make_response(redirect(newUrl))
     resp.set_cookie('username', '', expires=0)
+    return resp
+
+
+@app.route("/connexion", methods=['GET'])
+def se_connecter_get():
+    args = {}
+    redirect_url = request.args.get("redirect", default="/")
+    print(redirect_url)
+    if is_logged():
+        args["error"] = "Vous devez d'abord vous déconnecter pour réaliser cette action"
+        args["is_disabled"] = True
+    return render_template("pages/seConnecter.html", header=get_header(), redirect=redirect_url, **args)
+
+
+@app.route("/connexion", methods=['POST'])
+def se_connecter_post():
+    nom = request.form.get("nom", default="").strip()
+    mdp = request.form.get("mdp", default="")
+    redirect_url = request.args.get("redirect", default="/")
+    if nom == "" or mdp == "":
+        return render_template("pages/seConnecter.html",
+                               header=get_header(),
+                               error="Erreur lors de la saisie des identifiants",
+                               redirect=redirect_url)
+
+    flash('Vous êtes maintenant connecté')
+    resp = make_response(redirect(redirect_url))
+    resp.set_cookie("username", nom)
     return resp
 
 
