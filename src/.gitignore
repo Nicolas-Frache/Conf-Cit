@@ -1,3 +1,4 @@
 env/
 pyvenv.cfg
 .idea
+flaskProject/database/database.db

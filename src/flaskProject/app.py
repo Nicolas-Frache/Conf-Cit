@@ -1,21 +1,35 @@
-import MySQLdb
 from flask import *
-from flask_mysqldb import MySQL
+import sqlite3
+from flask import g
 
 app = Flask(__name__)
 app.secret_key = "secret"
+DATABASE = 'database/database.db'
 
 
-def connect_database(getdict=False):
-    args = {"host": "localhost",
-            "user": "flask",
-            "password": "flask",
-            "db": "confcit"
-            }
-    if getdict:
-        args["cursorclass"] = MySQLdb.cursors.DictCursor
-    db = MySQLdb.Connect(**args)
+# Connexion à la base sqlite
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect(DATABASE)
+        db.row_factory = sqlite3.Row
     return db
+
+
+# function that combines getting the cursor, executing and fetching the results
+# see: https://flask.palletsprojects.com/en/2.0.x/patterns/sqlite3/
+def query_db(query, args=(), one=False):
+    cur = get_db().execute(query, args)
+    rv = cur.fetchall()
+    cur.close()
+    return (rv[0] if rv else None) if one else rv
+
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
 
 
 def is_logged():
@@ -38,13 +52,15 @@ def home():
 @app.route('/listeCitoyens')
 def lister_citoyens():
     try:
-        with connect_database(getdict=True).cursor() as cursor:
-            cursor.execute("SELECT id as 'Numéro', Prenom, Nom, Profession "
-                           "from utilisateur")
-            data = cursor.fetchall()
+        user_list = query_db("SELECT *"
+                             "from UTILISATEUR")
+    # user_list = query_db("SELECT id as 'Numéro', Prenom, Nom, Profession, DATENAISSANCE as 'date'"
+    #                     "from UTILISATEUR")
     except Exception as e:
         return render_template("pages/error.html", error=str(e), header=get_header())
-    return render_template("pages/listeCitoyens.html", data_tab=data, header=get_header())
+    return render_template("pages/listeCitoyens.html", data_tab=user_list, header=get_header())
+
+
 
 
 # Page pour faire des tests
@@ -97,7 +113,6 @@ def se_connecter_post():
     return resp
 
 
+# Pour l'execution en ligne de commande directement avec 'Python3 app.py'
 if __name__ == '__main__':
-    # Extension au moteur de template qui permet de passer des paramètres dans un include
-    app.jinja_env.add_extension('jinja2.ext.with')
     app.run()

@@ -1,0 +1,16 @@
+DROP TABLE UTILISATEUR;
+
+CREATE TABLE UTILISATEUR (
+	ID INTEGER,
+	PASSWORD VARCHAR(30),
+	NOM VARCHAR(20),
+	PRENOM VARCHAR(20),
+	DATENAISSANCE INTEGER,
+	ROLE VARCHAR(10), /* admin,citoyen ou visiteur */
+	PROFESSION VARCHAR(20),
+	ETUDES VARCHAR(20),
+	SEXE VARCHAR(1),
+	CONSTRAINT user_PK PRIMARY KEY(ID)
+    );
+
+insert into UTILISATEUR values (0,"pwd","Reichmann","Jean-luc",time(),"admin","Retraite", null, null);
