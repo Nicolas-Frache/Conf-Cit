@@ -1,0 +1,24 @@
+{% extends "components/base.html" %}
+<!-- Prend en paramètre "page_title", le titre de la page de base -->
+<!-- Page à charger si l'utilisateur n'a pas la permission (soit parce pas connecté, soit parce que pas le bon rôle) -->
+{% block title %}
+    {{ page_title }}
+{% endblock %}
+
+{% block content %}
+    {% if header.is_logged %}
+        <p><b>Privilèges insuffisants</b></p>
+        <p>Vous n'avez pas la permission d'accéder à cette ressource.</p>
+    {% else %}
+        <p><b>Connexion nécessaire</b></p>
+        <p>Pour accèder à cette ressource vous devez vous identifier.</p>
+    {% endif %}
+    <form action="/connexion" method="get">
+        <div class="box_btn">
+            <button class="btn" type="submit">S'identifier</button>
+        </div>
+        <input type="hidden" name="redirect" value="{{ url_for(request.endpoint) }}" />
+    </form>
+{% endblock %}
+
+

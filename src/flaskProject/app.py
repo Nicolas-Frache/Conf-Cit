@@ -50,6 +50,8 @@ def lister_citoyens():
 # Page pour faire des tests
 @app.route('/sandbox')
 def sandbox():
+    if not is_logged():
+        return render_template("pages/acessWall.html", page_title="Sandbox", header=get_header())
     compteur = request.cookies.get("compteur")
     if compteur is None:
         val = "0"
@@ -72,7 +74,6 @@ def se_deconnecter():
 def se_connecter_get():
     args = {}
     redirect_url = request.args.get("redirect", default="/")
-    print(redirect_url)
     if is_logged():
         args["error"] = "Vous devez d'abord vous déconnecter pour réaliser cette action"
         args["is_disabled"] = True
