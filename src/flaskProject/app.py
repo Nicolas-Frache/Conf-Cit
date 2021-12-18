@@ -4,57 +4,49 @@ from flask import *
 import sqlite3
 from flask import g
 from flask_sqlalchemy import SQLAlchemy
+# Classes relatives aux tables de la base de données pour SQLAlchemy
+from model.classes import Utilisateur
 
-DATABASE = f'database{os.sep}database.db'
+# Création de l'application
 app = Flask(__name__)
 
+# Connexion à la base
+DATABASE = f'database{os.sep}database.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DATABASE}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+# Pour identifier la session de l'utilisateur actuel
 app.secret_key = "secret"
 
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nom = db.Column(db.String(50))
-    profession = db.Column(db.String(50))
-    date_naissance = db.Column(db.DateTime)
-
-
-# Connexion à la base sqlite
+# Connexion à la base sqlite pour le initdb, inutile pour le reste avec SQL Alchemy
 def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
-        db.row_factory = sqlite3.Row
-    return db
+    db_app = getattr(g, '_database', None)
+    if db_app is None:
+        db_app = g._database = sqlite3.connect(DATABASE)
+        db_app.row_factory = sqlite3.Row
+    return db_app
 
 
 # Permet d'initialiser la base sqlite avec la commande Flask initdb
 @app.cli.command('initdb')
 def initdb_command():
-    db = get_db()
+    db_app = get_db()
     with app.open_resource('database/schema.sql', mode='r') as f:
-        db.cursor().executescript(f.read())
-    db.commit()
+        db_app.cursor().executescript(f.read())
+    db_app.commit()
     print('Initialized the database.')
 
 
-# "function that combines getting the cursor, executing and fetching the results"
-# Voir: https://flask.palletsprojects.com/en/2.0.x/patterns/sqlite3/
-def query_db(query, args=(), one=False):
-    cur = get_db().execute(query, args)
-    rv = cur.fetchall()
-    cur.close()
-    return (rv[0] if rv else None) if one else rv
-
-
-@app.teardown_appcontext
-def close_connection(exception):
-    db = getattr(g, '_database', None)
-    if db is not None:
-        db.close()
+# Retourne un dictionnaire avec toute les colonnes de l'objet pour remplir un tableau plus vite
+def get_all_colonnes_for_data_tab(objet):
+    keys = list(vars(objet).keys())
+    colonnes = {}
+    for key in keys:
+        if not key.startswith("_"):
+            colonnes[key] = key
+    return colonnes
 
 
 def is_logged():
@@ -71,17 +63,11 @@ def get_header():
 
 @app.route('/test/<nom>/<profession>/')
 def test(nom, profession):
-    user = User(nom=nom, profession=profession)
+    user = Utilisateur(nom=nom, profession=profession)
     db.session.add(user)
     db.session.commit()
     print(request.view_args)
     return render_template("pages/home.html", header=get_header())
-
-
-@app.route('/getdb/<name>')
-def getName(name):
-    user = User.query.filter_by(nom=name).first()
-    return f'The job of the user is {user.profession}'
 
 
 @app.route('/home')
@@ -92,13 +78,23 @@ def home():
 @app.route('/listeCitoyens')
 def lister_citoyens():
     try:
-        user_list = query_db("SELECT *"
-                             "from UTILISATEUR")
-    # user_list = query_db("SELECT id as 'Numéro', Prenom, Nom, Profession, DATENAISSANCE as 'date'"
-    #                     "from UTILISATEUR")
+        # données: "select * from Utilisateur"
+        user_list = Utilisateur.query.all()
+
+        # Deux possibilités pour la gestion des colonnes:
+        #   1 - On récupère tout et on modifie après
+        colonnes = get_all_colonnes_for_data_tab(user_list[0])
+        #       On renomme la colonne id en Numéro pour l'affichage
+        colonnes["id"] = "Numéro"
+        #       On supprime la colonne nbAnneesPostBac de l'affichage
+        del colonnes["nbAnneesPostBac"]
+        del colonnes["password"]
+
+        #   2 - On crée directement ce qui nous intéresse
+        #       colonnes = {"nom": "Numéro", "nom": "Nom", "profession": "Profession actuelle"}
     except Exception as e:
         return render_template("pages/error.html", error=str(e), header=get_header())
-    return render_template("pages/listeCitoyens.html", data_tab=user_list, header=get_header())
+    return render_template("pages/listeCitoyens.html", data_tab=[colonnes, user_list], header=get_header())
 
 
 @app.route('/nouvelleConference')

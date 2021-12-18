@@ -1,4 +1,6 @@
-<!-- Ce component attend un argument date de type "liste de dictionnaires" -->
+<!-- Ce composant attend un argument "data" contenant une liste de deux élements,
+    - Le premier est un dictionnaire "nom de l'attribut de l'objet " -> "nom de la colonne dans le html"
+    - Le second est une liste d'objet du modèle (SQL Alchemy)' -->
 {% block css %}
     <link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename='css/data_tab.css') }}" />
 {% endblock %}
@@ -6,15 +8,15 @@
     <thead>
         <tr>
             {% for key in data[0].keys() %}
-                <th> {{ key }} </th>
+                <th> {{ data[0][key] }} </th>
             {% endfor %}
         </tr>
     </thead>
     <tbody>
-        {% for dico in data %}
+        {% for objet in data[1] %}
             <tr>
-                {% for key in dico.keys() %}
-                    <td> {{ dico[key] }} </td>
+                {% for key in data[0].keys() %}
+                    <td> {{ objet[key] }} </td>
                 {% endfor %}
             </tr>
         {% endfor %}

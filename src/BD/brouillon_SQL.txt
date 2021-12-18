@@ -16,7 +16,7 @@ CREATE TABLE conference(
 	id INTEGER,
 	titre VARCHAR(20),
 	theme VARCHAR(20),
-	dateCreation VARCHAR(50),
+	dateCreation VARCHAR(50) DEFAULT (datetime(current_timestamp)),
 	etatActuel VARCHAR(10),
 	description VARCHAR(500),
 	CONSTRAINT conference_PK PRIMARY KEY(id)
@@ -25,11 +25,10 @@ CREATE TABLE conference(
 CREATE TABLE questionnaire(
 	id INTEGER,
 	titre VARCHAR(200),
-	createur INTEGER, /* ref à ID_USER */
-	dateFermeture VARCHAR(50),
+	idCreateur INTEGER, /* ref à ID_USER */
+	dateFermeture VARCHAR(50) DEFAULT (DATETIME('now', '+2 days')),
 	conference INTEGER,
 	CONSTRAINT questionnaire_PK PRIMARY KEY(id),
-	CONSTRAINT questionnaire_user_fk FOREIGN KEY (createur) REFERENCES utilisateur(id),
 	CONSTRAINT questionnaire_user_fk FOREIGN KEY (createur) REFERENCES utilisateur(id),
 	CONSTRAINT questionnaire_conf_fk FOREIGN KEY (conference) REFERENCES conference(id)
 );
@@ -41,7 +40,7 @@ CREATE TABLE question(
 	contenu VARCHAR(500),
 	idQuestionnaire INTEGER,
 	CONSTRAINT question_PK PRIMARY KEY(id),
-	CONSTRAINT question_questionnaire_fk FOREIGN KEY (idQuestionnaire) REFERENCES QUESTIONNAIRE (id)
+	CONSTRAINT question_questionnaire_fk FOREIGN KEY (idQuestionnaire) REFERENCES questionnaire(id)
 );
 
 CREATE TABLE reponseTexte(
