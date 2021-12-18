@@ -2,3 +2,4 @@ env/
 pyvenv.cfg
 .idea
 flaskProject/database/database.db
+flaskProjet/__pycache__

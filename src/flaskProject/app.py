@@ -1,10 +1,25 @@
+import os
+
 from flask import *
 import sqlite3
 from flask import g
+from flask_sqlalchemy import SQLAlchemy
 
+DATABASE = f'database{os.sep}database.db'
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DATABASE}"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
 app.secret_key = "secret"
-DATABASE = 'database/database.db'
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nom = db.Column(db.String(50))
+    profession = db.Column(db.String(50))
+    date_naissance = db.Column(db.DateTime)
 
 
 # Connexion à la base sqlite
@@ -16,8 +31,18 @@ def get_db():
     return db
 
 
-# function that combines getting the cursor, executing and fetching the results
-# see: https://flask.palletsprojects.com/en/2.0.x/patterns/sqlite3/
+# Permet d'initialiser la base sqlite avec la commande Flask initdb
+@app.cli.command('initdb')
+def initdb_command():
+    db = get_db()
+    with app.open_resource('database/schema.sql', mode='r') as f:
+        db.cursor().executescript(f.read())
+    db.commit()
+    print('Initialized the database.')
+
+
+# "function that combines getting the cursor, executing and fetching the results"
+# Voir: https://flask.palletsprojects.com/en/2.0.x/patterns/sqlite3/
 def query_db(query, args=(), one=False):
     cur = get_db().execute(query, args)
     rv = cur.fetchall()
@@ -44,7 +69,22 @@ def get_header():
     return header
 
 
-@app.route('/')
+@app.route('/test/<nom>/<profession>/')
+def test(nom, profession):
+    user = User(nom=nom, profession=profession)
+    db.session.add(user)
+    db.session.commit()
+    print(request.view_args)
+    return render_template("pages/home.html", header=get_header())
+
+
+@app.route('/getdb/<name>')
+def getName(name):
+    user = User.query.filter_by(nom=name).first()
+    return f'The job of the user is {user.profession}'
+
+
+@app.route('/home')
 def home():
     return render_template("pages/home.html", header=get_header())
 
@@ -61,6 +101,12 @@ def lister_citoyens():
     return render_template("pages/listeCitoyens.html", data_tab=user_list, header=get_header())
 
 
+@app.route('/nouvelleConference')
+def creationFormulaire():
+    if not is_logged():
+        return render_template("pages/acessWall.html", page_title="Nouvelle Conférence", header=get_header())
+    resp = make_response(render_template("pages/formulaireCreationConf.html", header=get_header()))
+    return resp
 
 
 # Page pour faire des tests
