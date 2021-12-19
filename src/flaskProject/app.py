@@ -83,15 +83,11 @@ def lister_citoyens():
 
         # Deux possibilités pour la gestion des colonnes:
         #   1 - On récupère tout et on modifie après
-        colonnes = get_all_colonnes_for_data_tab(user_list[0])
-        #       On renomme la colonne id en Numéro pour l'affichage
-        colonnes["id"] = "Numéro"
-        #       On supprime la colonne nbAnneesPostBac de l'affichage
-        del colonnes["nbAnneesPostBac"]
-        del colonnes["password"]
+        # colonnes = get_all_colonnes_for_data_tab(user_list[0])
 
         #   2 - On crée directement ce qui nous intéresse
-        #       colonnes = {"nom": "Numéro", "nom": "Nom", "profession": "Profession actuelle"}
+        colonnes = {"id": "Numéro", "nom": "Nom", "prenom": "Prénom",
+                    "sexe": "Sexe", "profession": "Profession actuelle", "dateNaissance": "Date de Naissance"}
     except Exception as e:
         return render_template("pages/error.html", error=str(e), header=get_header())
     return render_template("pages/listeCitoyens.html", data_tab=[colonnes, user_list], header=get_header())
