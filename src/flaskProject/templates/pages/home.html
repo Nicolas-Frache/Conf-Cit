@@ -12,7 +12,7 @@
         <div class="box_btn">
             <button class="btn" type="submit">S'identifier</button>
         </div>
-        <input type="hidden" name="redirect" value="{{ url_for(request.endpoint) }}" />
+        <input type="hidden" name="redirect" value="{{ url_for(request.endpoint, **request.view_args) }}" />
     </form>
 
     <p>Vous voulez simplement explorer les conférence de citoyens passées et en cours ?</p>

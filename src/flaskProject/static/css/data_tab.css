@@ -21,4 +21,5 @@
 
 .data_tab tbody tr td {
     padding: 12px 15px;
+    max-width: min-content;
 }
