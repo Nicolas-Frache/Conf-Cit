@@ -19,7 +19,7 @@
     border-bottom: 1px solid #dddddd;
 }
 
-.data_tab tbody tr td {
+.data_tab thead tr th, .data_tab tbody tr td {
     padding: 12px 15px;
     max-width: min-content;
 }

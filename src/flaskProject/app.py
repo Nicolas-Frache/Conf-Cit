@@ -1,11 +1,10 @@
-import os
+import sqlite3
 
 from flask import *
-import sqlite3
 from flask import g
-from flask_sqlalchemy import SQLAlchemy
+
 # Classes relatives aux tables de la base de données pour SQLAlchemy
-from model.classes import Utilisateur
+from model.classes import *
 
 # Création de l'application
 app = Flask(__name__)
@@ -70,6 +69,7 @@ def test(nom, profession):
     return render_template("pages/home.html", header=get_header())
 
 
+@app.route('/')
 @app.route('/home')
 def home():
     return render_template("pages/home.html", header=get_header())
@@ -93,7 +93,7 @@ def lister_citoyens():
     return render_template("pages/listeCitoyens.html", data_tab=[colonnes, user_list], header=get_header())
 
 
-@app.route('/nouvelleConference')
+@app.route('/nouvelleConference.html')
 def creationFormulaire():
     if not is_logged():
         return render_template("pages/acessWall.html", page_title="Nouvelle Conférence", header=get_header())
@@ -150,6 +150,29 @@ def se_connecter_post():
     resp.set_cookie("username", nom)
     return resp
 
+
+@app.route("/nouvelleConference", methods=['GET'])
+def nouvelle_conference():
+    if not is_logged():
+        return render_template("pages/acessWall.html", page_title="Nouvelle conférence", header=get_header())
+    return render_template("pages/nouvelleConference.html", header=get_header())
+
+
+@app.route("/nouvelleConference", methods=['POST'])
+def nouvelle_conference_post():
+    titre = request.form.get("titre", default="")
+    theme = request.form.get("theme", default="")
+    desc = request.form.get("desc", default="")
+    if titre.strip() == "":
+        flash("Le titre ne peut être vide", "error")
+        return redirect(url_for("nouvelle_conference"))
+    try:
+        conference = Conference(titre=titre, theme=theme, description=desc)
+        db.session.add(conference)
+        db.session.commit()
+    except Exception as e:
+        return render_template("pages/error.html", error=str(e), header=get_header())
+    return "OK"
 
 # Pour l'execution en ligne de commande directement avec 'Python3 app.py'
 if __name__ == '__main__':

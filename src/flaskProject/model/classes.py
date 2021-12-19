@@ -5,7 +5,6 @@ import random
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import declarative_base
 
 from faker import Faker
 from datetime import datetime, date, timedelta
@@ -15,9 +14,6 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DATABASE}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-
-# declarative base class
-Base = declarative_base()
 
 
 def populate_with_random():
@@ -72,7 +68,7 @@ class Conference(db.Model):
     titre = db.Column(db.String(20))
     theme = db.Column(db.String(20))
     dateCreation = db.Column(db.String(50), server_default=db.FetchedValue())
-    etatActuel = db.Column(db.String(10))
+    etatActuel = db.Column(db.String(10), default="En cours")
     description = db.Column(db.String(500))
 
     participations = db.relationship('Participe',

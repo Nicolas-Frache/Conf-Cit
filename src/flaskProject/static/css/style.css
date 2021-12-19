@@ -53,7 +53,9 @@ img {
 
 .longInput {width: 90%;}
 
-input {
+input, textarea {
+    font-family: inherit;
+    font-size: inherit;
     background-color: white;
     border: none;
     border-radius: 3px;
@@ -62,7 +64,7 @@ input {
     outline: none;
     font-size: 1.3em;
     padding: 13px;
-    margin: 5px;
+    margin: 5px 5px 10px;
     transition: 0.2s;
 }
 
@@ -86,6 +88,9 @@ input {
     transition: 0.2s;
 }
 
-.btn:hover {transform: scale(1.03);}
+.btn:hover, .submit_btn:hover{
+    transform: scale(1.06);
+    transition: 0.2s;
+}
 
 
