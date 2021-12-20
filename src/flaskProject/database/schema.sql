@@ -29,8 +29,8 @@ CREATE TABLE questionnaire(
 	dateFermeture VARCHAR(50) DEFAULT (DATETIME('now', '+2 days')),
 	idConference INTEGER,
 	CONSTRAINT questionnaire_PK PRIMARY KEY(id),
-	CONSTRAINT questionnaire_user_fk FOREIGN KEY (createur) REFERENCES utilisateur(id),
-	CONSTRAINT questionnaire_conf_fk FOREIGN KEY (conference) REFERENCES conference(id)
+	CONSTRAINT questionnaire_user_fk FOREIGN KEY (idCreateur) REFERENCES utilisateur(id),
+	CONSTRAINT questionnaire_conf_fk FOREIGN KEY (idConference) REFERENCES conference(id)
 );
 
 CREATE TABLE question(
