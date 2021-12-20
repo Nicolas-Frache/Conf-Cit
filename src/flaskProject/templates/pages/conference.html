@@ -1,0 +1,41 @@
+{% extends "components/base.html" %}
+
+{% block title %}
+    Conférence de citoyens: {{ conf.titre }}
+{% endblock %}
+
+{% block content %}
+    <p><b>Description: </b></p>
+
+    <p>{{ conf.description }}</p>
+
+
+    <p><b>Questionnaires associés: </b></p>
+
+    {% block css %}
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/data_tab.css') }}"/>
+    {% endblock %}
+    <table class="data_tab">
+        <thead>
+        <tr>
+            <th>Titre questionnaire</th>
+            <th>Date de fermeture</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for questionnaire in questionnaires %}
+            <tr>
+                <td><a href="questionnaire/{{ questionnaire.id }}">{{ questionnaire.titre }}</a></td>
+                <td> {{ questionnaire.dateFermeture }} </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <form action="/nouveauQuestionnaire" method="get">
+        <div class="box_btn">
+            <button class="btn" type="submit">Créer un questionnaire associé à cette conférence</button>
+        </div>
+        <input type="hidden" name="idConference" value="{{ conf.id }}"/>
+    </form>
+{% endblock %}

@@ -2,16 +2,21 @@
     width: 100%;
     border-collapse: collapse;
     margin: 25px 0;
-    font-size: 0.9em;
+    font-size: 1.1em;
     min-width: 300px;
     border-radius: 5px 5px 0 0;
     overflow: hidden;
-    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     color: white;
     text-align: left;
 }
 
-.data_tab thead{
+a:hover, a:visited, a:link, a:active {
+    text-decoration: none;
+    color: white;
+}
+
+.data_tab thead {
     background-color: rgb(13, 84, 99);
 }
 
@@ -20,6 +25,6 @@
 }
 
 .data_tab thead tr th, .data_tab tbody tr td {
-    padding: 12px 15px;
+    padding: 20px 15px;
     max-width: min-content;
 }

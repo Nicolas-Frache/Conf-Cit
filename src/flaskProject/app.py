@@ -160,19 +160,34 @@ def nouvelle_conference():
 
 @app.route("/nouvelleConference", methods=['POST'])
 def nouvelle_conference_post():
+    # Valeur dans le formulaire
     titre = request.form.get("titre", default="")
     theme = request.form.get("theme", default="")
     desc = request.form.get("desc", default="")
     if titre.strip() == "":
+        # Erreur si le titre est vide
         flash("Le titre ne peut être vide", "error")
         return redirect(url_for("nouvelle_conference"))
     try:
+        # Ajout de la conférence dans la base
         conference = Conference(titre=titre, theme=theme, description=desc)
         db.session.add(conference)
         db.session.commit()
     except Exception as e:
         return render_template("pages/error.html", error=str(e), header=get_header())
-    return "OK"
+    # Message de succès et redirection vers la page de la nouvelle conférence
+    flash("Conférence de citoyens crée avec succès", "sucess")
+    return redirect(url_for("page_conference", idConference=conference.id))
+
+
+@app.route("/conference/<int:idConference>")
+def page_conference(idConference):
+    # Recherche la conférence associé à l'argument et lance une 404 si elle n'existe pas (propre à flask-sqlAlchemy)
+    conference = Conference.query.filter_by(id=idConference).first_or_404()
+    questionnaires = conference.questionnaires
+    return render_template("pages/conference.html", header=get_header(), questionnaires=questionnaires,
+                           conf=conference)
+
 
 # Pour l'execution en ligne de commande directement avec 'Python3 app.py'
 if __name__ == '__main__':
