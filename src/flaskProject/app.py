@@ -189,6 +189,17 @@ def page_conference(idConference):
                            conf=conference)
 
 
+@app.route("/conference")
+def lister_conferences():
+    # Lister toutes les conférences en cours
+    try:
+        # données: "select * from Conference"
+        conferences = Conference.query.all()
+    except Exception as e:
+        return render_template("pages/error.html", error=str(e), header=get_header())
+    return render_template("pages/listeConferences.html", data_tab=conferences, header=get_header())
+
+
 # Pour l'execution en ligne de commande directement avec 'Python3 app.py'
 if __name__ == '__main__':
     app.run()

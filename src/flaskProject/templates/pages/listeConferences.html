@@ -1,0 +1,35 @@
+{% extends "components/base.html" %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename='css/data_tab.css') }}" />
+{% endblock %}
+{% block title %}
+    LISTE DES CONFÉRENCES
+{% endblock %}
+
+{% block content %}
+
+    <table class="data_tab">
+        <thead>
+        <tr>
+            <th>N°</th>
+            <th>Titre</th>
+            <th>Thème</th>
+            <th>Date de création</th>
+            <th>État actuel</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for conf in data_tab %}
+            <tr style = "cursor: pointer;" onclick="document.location = 'conference/{{ conf.id }}'">
+                <td>{{ conf.id }}</td>
+                <td><a href="conference/{{ conf.id }}">{{ conf.titre }}</a></td>
+                <td>{{ conf.theme }}</td>
+                <td> {{ conf.dateCreation }} </td>
+                <td> {{ conf.etatActuel }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+
