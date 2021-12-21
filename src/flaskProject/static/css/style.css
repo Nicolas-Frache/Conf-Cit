@@ -40,8 +40,9 @@ img {
 
 .form {
     border: 2px solid white;
-    width: 40%;
-    padding-left: 7px;
+    width: 45%;
+    padding-left: 15px;
+    padding-bottom: 15px;
     margin: 2%;
     border-radius: 5px;
 }
@@ -88,9 +89,35 @@ input, textarea {
     transition: 0.2s;
 }
 
-.btn:hover, .submit_btn:hover{
+.btn:hover, .submit_btn:hover, .misc_btn:hover{
     transform: scale(1.06);
     transition: 0.2s;
 }
 
+.misc_btn{
+    margin-right: 30px;
+    font-size: 1.1em;
+}
 
+.radio_btn {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+
+.qcm_choix_zone {
+    margin-left: 40px;
+}
+
+.qcm_choix_zone input {
+    width: 80%;
+    padding: 7px;
+    font-size: 1.1em;
+    line-height: 0.5;
+}
+
+.qcm_choix_zone .submit_btn {
+    width: 55px;
+    height: 55px;
+    font-size: 2em;
+}

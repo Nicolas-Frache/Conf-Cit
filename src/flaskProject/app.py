@@ -93,14 +93,6 @@ def lister_citoyens():
     return render_template("pages/listeCitoyens.html", data_tab=[colonnes, user_list], header=get_header())
 
 
-@app.route('/nouvelleConference.html')
-def creationFormulaire():
-    if not is_logged():
-        return render_template("pages/acessWall.html", page_title="Nouvelle Conférence", header=get_header())
-    resp = make_response(render_template("pages/formulaireCreationConf.html", header=get_header()))
-    return resp
-
-
 # Page pour faire des tests
 @app.route('/sandbox')
 def sandbox():
@@ -201,6 +193,16 @@ def lister_conferences():
     except Exception as e:
         return render_template("pages/error.html", error=str(e), header=get_header())
     return render_template("pages/listeConferences.html", data_tab=conferences, header=get_header())
+
+
+@app.route("/nouveauQuestionnaire/<int:idConference>")
+def nouveau_questionnaire(idConference, methods=['GET']):
+    if Conference.query.filter_by(id=idConference).count() == 0:
+        erreur = "L'accès à la page de création de questionnaire se fait en cliquant sur le bouton correspondant " \
+                 "sur la page de la conférence de citoyens associée (url de type /conference/<idConference>)"
+        return render_template("pages/error.html", error=erreur, header=get_header())
+    conference = Conference.query.filter_by(id=idConference).first()
+    return render_template("pages/formulaireCreationQuestionnaire.html", header=get_header(), conference=conference)
 
 
 # Pour l'execution en ligne de commande directement avec 'Python3 app.py'

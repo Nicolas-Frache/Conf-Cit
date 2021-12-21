@@ -1,0 +1,27 @@
+{% extends "components/base.html" %}
+
+{% block title %}
+    Création d'un questionnaire
+{% endblock %}
+{% block js %}
+    <script src="{{ url_for('static', filename='js/creationQuestionnaire.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <p>Pour créer un questionnaire associé à la conférence "{{ conference.titre }}" ajoutez autant de questions que vous
+        le désirez ci-dessous puis validez.</p>
+    <form method="post questionnaire" enctype="multipart/form-data"
+          action="{{ url_for("nouvelle_conference_post") }}" name="creationQuestionnaire">
+        <div id="questions">
+
+        </div>
+        <p>
+            <input id="retirer_question" class="misc_btn" type="button" value="Retirer question">
+            <input id="ajouter_question" class="misc_btn" type="button" value="Ajouter question">
+        </p>
+        <div class="center">
+            <input class="submit_btn" type="submit" value="Valider le questionnaire">
+        </div>
+        <input id="nb_questions" type="hidden" name="nb_questions" value=""/>
+    </form>
+{% endblock %}

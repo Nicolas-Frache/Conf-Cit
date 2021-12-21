@@ -2,32 +2,34 @@
 <html lang="en">
 {% block css %}
 {% endblock %}
-<link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename='css/style.css') }}" />
-<link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename='css/header.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/header.css') }}"/>
 <head>
     <title>
-       Conf-Cit
+        Conf-Cit
     </title>
 </head>
 <body>
-    {% include 'components/header.html' %}
-    <div><h1>
-        {% block title %} 
-            Conf-Cit - Titre pas défaut
-        {% endblock %}
-    </h1></div>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class=sucess>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-    <div id="content">
-        {% block content %}
-        {% endblock %}
-    </div>
+{% include 'components/header.html' %}
+<div><h1>
+    {% block title %}
+        Conf-Cit - Titre pas défaut
+    {% endblock %}
+</h1></div>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class=sucess>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+<div id="content">
+    {% block content %}
+    {% endblock %}
+</div>
+{% block js %}
+{% endblock %}
 </body>
 </html>
