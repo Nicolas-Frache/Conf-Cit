@@ -182,11 +182,14 @@ def nouvelle_conference_post():
 
 @app.route("/conference/<int:idConference>")
 def page_conference(idConference):
-    # Recherche la conférence associé à l'argument et lance une 404 si elle n'existe pas (propre à flask-sqlAlchemy)
+    # Recherche la conférence associée à l'argument et lance une 404 si elle n'existe pas (propre à flask-sqlAlchemy)
     conference = Conference.query.filter_by(id=idConference).first_or_404()
+    participants = Utilisateur.query.join(Participe).filter(Participe.idConference == idConference)
+    colonnes = {"id": "Numéro", "nom": "Nom", "prenom": "Prénom",
+                "sexe": "Sexe", "profession": "Profession actuelle", "dateNaissance": "Date de Naissance"}
     questionnaires = conference.questionnaires
     return render_template("pages/conference.html", header=get_header(), questionnaires=questionnaires,
-                           conf=conference)
+                           conf=conference, participants=[colonnes, participants])
 
 
 @app.route("/conference")

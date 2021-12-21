@@ -38,4 +38,8 @@
         </div>
         <input type="hidden" name="idConference" value="{{ conf.id }}"/>
     </form>
+    {% with data=participants %}
+        <p>Participants à la conférence : </p>
+        {% include 'components/data_tab.html' %}
+    {% endwith %}
 {% endblock %}
