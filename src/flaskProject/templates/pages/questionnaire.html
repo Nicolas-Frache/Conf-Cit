@@ -1,0 +1,21 @@
+{% extends "components/base.html" %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename='css/data_tab.css') }}" />
+{% endblock %}
+{% block title %}
+    CONTENU DU QUESTIONNAIRE : "{{ quest.titre }}"
+{% endblock %}
+
+{% block content %}
+    Date de fermeture : {{ quest.dateFermeture }} | Issu de la conférence {{ conf.titre }} de thème {{ conf.theme }} | id : {{ quest.id }}
+
+    <h1>Les questions suivantes ont été posées aux participants :</h1>
+    {% for q in qu %}
+        <li>{{ q.contenu }}</li>
+    {% endfor %}
+
+    {% with data=part %}
+        <p>Participants à la conférence : </p>
+        {% include 'components/data_tab.html' %}
+    {% endwith %}
+{% endblock %}

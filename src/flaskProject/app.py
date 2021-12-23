@@ -242,6 +242,22 @@ def nouveau_questionnaire_post():
     return redirect(url_for("page_conference", idConference=int(form["id_conf"])))
 
 
+@app.route("/conference/questionnaire/<idQuestionnaire>")
+def afficher_questionnaire(idQuestionnaire):
+    # Affiche le contenu du questionnaire d'identifiant idQuestionnaire
+    try:
+        questionnaire = Questionnaire.query.filter(Questionnaire.id == idQuestionnaire).all()[0]
+        conference = Conference.query.filter(questionnaire.idConference == Conference.id).all()[0]
+        questions = Question.query.filter(Question.idQuestionnaire == idQuestionnaire)
+        participants = Utilisateur.query.join(Participe).filter(Participe.idConference == conference.id).all()
+        print(participants)
+    except Exception as e:
+        return render_template("pages/error.html", error=str(e), header=get_header())
+    colonnes = {"id": "Numéro", "nom": "Nom", "prenom": "Prénom",
+                "sexe": "Sexe", "profession": "Profession actuelle", "dateNaissance": "Date de Naissance"}
+    return render_template('pages/questionnaire.html', header=get_header(), quest=questionnaire, conf=conference, qu=questions, part=[colonnes, participants])
+
+
 @app.route("/resultat/<idQuestionnaire>")
 def resultats(idQuestionnaire):
     questions = Question.query.filter(Question.idQuestionnaire == idQuestionnaire).all()
