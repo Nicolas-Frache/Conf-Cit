@@ -32,11 +32,10 @@
         </tbody>
     </table>
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <form action="/nouveauQuestionnaire" method="get">
+    <form action="/nouveauQuestionnaire/{{ conf.id }}" method="get">
         <div class="box_btn">
             <button class="btn" type="submit">Créer un questionnaire associé à cette conférence</button>
         </div>
-        <input type="hidden" name="idConference" value="{{ conf.id }}"/>
     </form>
     {% with data=participants %}
         <p>Participants à la conférence : </p>

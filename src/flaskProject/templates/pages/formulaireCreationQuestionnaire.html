@@ -10,8 +10,8 @@
 {% block content %}
     <p>Pour créer un questionnaire associé à la conférence "{{ conference.titre }}" ajoutez autant de questions que vous
         le désirez ci-dessous puis validez.</p>
-    <form method="post questionnaire" enctype="multipart/form-data"
-          action="{{ url_for("nouvelle_conference_post") }}" name="creationQuestionnaire">
+    <form method="POST" enctype="multipart/form-data"
+          action="{{ url_for("nouveau_questionnaire_post") }}" name="creationQuestionnaire">
         <div id="questions">
 
         </div>
@@ -22,6 +22,7 @@
         <div class="center">
             <input class="submit_btn" type="submit" value="Valider le questionnaire">
         </div>
-        <input id="nb_questions" type="hidden" name="nb_questions" value=""/>
+        <input id="nb_questions" type="hidden" name="nb_questions" value="0"/>
+        <input type="hidden" name="id_conf" value="{{ conference.id }}"/>
     </form>
 {% endblock %}

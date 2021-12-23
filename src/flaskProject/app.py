@@ -136,7 +136,6 @@ def se_connecter_post():
                                header=get_header(),
                                error="Erreur lors de la saisie des identifiants",
                                redirect=redirect_url)
-
     flash('Vous êtes maintenant connecté')
     resp = make_response(redirect(redirect_url))
     resp.set_cookie("username", nom)
@@ -195,14 +194,52 @@ def lister_conferences():
     return render_template("pages/listeConferences.html", data_tab=conferences, header=get_header())
 
 
-@app.route("/nouveauQuestionnaire/<int:idConference>")
-def nouveau_questionnaire(idConference, methods=['GET']):
+@app.route("/nouveauQuestionnaire/<int:idConference>", methods=['GET'])
+def nouveau_questionnaire(idConference):
     if Conference.query.filter_by(id=idConference).count() == 0:
         erreur = "L'accès à la page de création de questionnaire se fait en cliquant sur le bouton correspondant " \
                  "sur la page de la conférence de citoyens associée (url de type /conference/<idConference>)"
         return render_template("pages/error.html", error=erreur, header=get_header())
     conference = Conference.query.filter_by(id=idConference).first()
     return render_template("pages/formulaireCreationQuestionnaire.html", header=get_header(), conference=conference)
+
+
+@app.route("/nouveauQuestionnaire", methods=['POST'])
+def nouveau_questionnaire_post():
+    try:
+        # Construction des objets de base de données correspondants aux résultat du form
+        form = request.form
+        # Cas d'erreur si la conférence correspondante n'est pas valide
+        if Conference.query.filter_by(id=form["id_conf"]).count() == 0:
+            raise Exception('La conférence du formulaire n\'existe pas')
+        # Création du questionnaire (on le commit directement car on a besoin de l'id généré après)
+        questionnaire: Questionnaire = Questionnaire(titre="Titre #TODO",
+                                                     idConference=form["id_conf"])
+        db.session.add(questionnaire)
+        db.session.commit()
+        # Création des questions (qu'on commit à chaque fois pour la même raison)
+        for idxQuestion in range(1, int(form["nb_questions"]) + 1):
+            contenu = form[f"q_{idxQuestion}"]
+            typeQ = "TEXTE" if (int(form[f"radio_{idxQuestion}"]) == 1) else "QCM"
+            question: Question = Question(numero=idxQuestion,
+                                          typeQuestion=typeQ,
+                                          contenu=contenu,
+                                          idQuestionnaire=questionnaire.id)
+            db.session.add(question)
+            db.session.commit()
+            if typeQ == "QCM":
+                # Si c'est un QCM, création de tous les objets ChoixQcm nécessaires
+                for idxChoix in range(1, int(form[f"nb_choix_qcm_{idxQuestion}"]) + 1):
+                    choix_qcm: ChoixQcm = ChoixQcm(numero=idxChoix,
+                                                   contenu=form[f"qcm-{idxQuestion}-{idxChoix}"],
+                                                   idQuestion=question.id)
+                    db.session.add(choix_qcm)
+                db.session.commit()
+    except Exception as e:
+        return render_template("pages/error.html", error="Le contenu du formulaire est mal construit",
+                               header=get_header())
+    flash("Questionnaire crée avec succès")
+    return redirect(url_for("page_conference", idConference=int(form["id_conf"])))
 
 
 @app.route("/resultat/<idQuestionnaire>")
