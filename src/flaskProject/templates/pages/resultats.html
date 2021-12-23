@@ -1,5 +1,31 @@
 {% extends "components/base.html" %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename='css/data_tab.css') }}" />
+    <link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename='css/style_reponses.css') }}" />
+{% endblock %}
 
 {% block title %}
-    Résultat du questionnaire {{idquest}}
+    Résultat du questionnaire d'identifiant {{ id }} :
+{% endblock %}
+
+{% block content %}
+    {% for d in range(0,donnees|length) %} <!--On parcourt les questions -->
+        <div>
+        <input type="checkbox" id="faq_{{ d }}"> <!--Réponses QCM -->
+        <h2><label for="faq_{{ d }}">{{ donnees[d][0].contenu }}</label></h2>
+        {% for rqcm in donnees[d][1] %}
+            <p>{{ rqcm[1] }} participant(s) ont voté "{{ rqcm[0].contenu }}"</p>
+        {% endfor %}
+
+        {% for rtxt in donnees[d] %} <!--Réponses textuelles -->
+            {% for r in rtxt.reponses_texte %}
+            <p>{{ r.contenu }}</p>
+            {% endfor %}
+        {% endfor %}
+        </div>
+    {% endfor %}
+
+
+
+
 {% endblock %}

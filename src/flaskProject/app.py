@@ -205,6 +205,22 @@ def nouveau_questionnaire(idConference, methods=['GET']):
     return render_template("pages/formulaireCreationQuestionnaire.html", header=get_header(), conference=conference)
 
 
+@app.route("/resultat/<idQuestionnaire>")
+def resultats(idQuestionnaire):
+    questions = Question.query.filter(Question.idQuestionnaire == idQuestionnaire).all()
+    res = []
+    for q in questions:
+        if q.typeQuestion == "TEXTE":
+            res.append((q, ()))
+        else:
+            tuplesQcm = []
+            for choixQcm in q.liste_choix_qcm:
+                nbReponse = len(choixQcm.reponses_qcm)
+                tuplesQcm.append((choixQcm, nbReponse))
+            res.append((q, tuplesQcm))
+    return render_template("pages/resultats.html", header=get_header(), id=idQuestionnaire, donnees=res)
+
+
 # Pour l'execution en ligne de commande directement avec 'Python3 app.py'
 if __name__ == '__main__':
     app.run()
