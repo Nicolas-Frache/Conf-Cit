@@ -105,9 +105,6 @@ class Question(db.Model):
     liste_choix_qcm = db.relationship('ChoixQcm',
                                       primaryjoin='ChoixQcm.idQuestion == Question.id',
                                       backref='question')
-    reponses_qcm = db.relationship('ReponseQcm',
-                                   primaryjoin='ReponseQcm.idQuestion == Question.id',
-                                   backref='question')
     reponses_texte = db.relationship('ReponseTexte',
                                      primaryjoin='ReponseTexte.idQuestion == Question.id',
                                      backref='question')
