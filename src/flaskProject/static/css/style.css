@@ -84,8 +84,8 @@ input, textarea {
     box-shadow: 6px 6px 20px 4px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     outline: none;
-    font-size: 1.6em;
-    padding: 20px;
+    font-size: 1.5em;
+    padding: 15px;
     transition: 0.2s;
 }
 
@@ -97,27 +97,4 @@ input, textarea {
 .misc_btn{
     margin-right: 30px;
     font-size: 1.1em;
-}
-
-.radio_btn {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-}
-
-.qcm_choix_zone {
-    margin-left: 40px;
-}
-
-.qcm_choix_zone input {
-    width: 80%;
-    padding: 7px;
-    font-size: 1.1em;
-    line-height: 0.5;
-}
-
-.qcm_choix_zone .submit_btn {
-    width: 55px;
-    height: 55px;
-    font-size: 2em;
 }

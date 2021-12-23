@@ -5,12 +5,12 @@
 {% endblock %}
 
 {% block content %}
-    <p><b>Description: </b></p>
+    <p><b>Description : </b></p>
 
     <p>{{ conf.description }}</p>
 
 
-    <p><b>Questionnaires associés: </b></p>
+    <p><b>Questionnaires associés : </b></p>
 
     {% block css %}
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/data_tab.css') }}"/>
@@ -20,6 +20,8 @@
         <tr>
             <th>Titre questionnaire</th>
             <th>Date de fermeture</th>
+            <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -27,6 +29,20 @@
             <tr>
                 <td><a href="questionnaire/{{ questionnaire.id }}">{{ questionnaire.titre }}</a></td>
                 <td> {{ questionnaire.dateFermeture }} </td>
+                <td>
+                    <form action="/resultat/{{ questionnaire.id }}" method="get">
+                        <div class="box_btn">
+                            <button class="btn btn_in_tab" type="submit">Voir résultats</button>
+                        </div>
+                    </form>
+                </td>
+                <td>
+                    <form action="/repondre/{{ questionnaire.id }}" method="get">
+                        <div class="box_btn">
+                            <button class="btn btn_in_tab" type="submit">Répondre</button>
+                        </div>
+                    </form>
+                </td>
             </tr>
         {% endfor %}
         </tbody>
@@ -38,7 +54,7 @@
         </div>
     </form>
     {% with data=participants %}
-        <p>Participants à la conférence : </p>
+        <p><b>Participants à la conférence : </b></p>
         {% include 'components/data_tab.html' %}
     {% endwith %}
 {% endblock %}

@@ -213,7 +213,7 @@ def nouveau_questionnaire_post():
         if Conference.query.filter_by(id=form["id_conf"]).count() == 0:
             raise Exception('La conférence du formulaire n\'existe pas')
         # Création du questionnaire (on le commit directement car on a besoin de l'id généré après)
-        questionnaire: Questionnaire = Questionnaire(titre="Titre #TODO",
+        questionnaire: Questionnaire = Questionnaire(titre=form["titre_questionnaire"],
                                                      idConference=form["id_conf"])
         db.session.add(questionnaire)
         db.session.commit()

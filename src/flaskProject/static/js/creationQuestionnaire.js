@@ -132,12 +132,11 @@ const retirerChoixQCM = function (numQ) {
  */
 const insertNewQuestion = function (n) {
     let HTML = `
-    <div class="question">
             <h2>Question #${n}</h2>
             <div class="form">
                 <h2>Intitulé de la question</h2>
                 <textarea class="longInput" name="q_${n}" rows="2" cols="60"
-                          placeholder="Saisir l'intitulé de la question"></textarea>
+                          placeholder="Saisir l'intitulé de la question" required=""></textarea>
                 <h2>Selection du type de réponse</h2>
                 
                 <input class="radio_btn" id="${n}-1" type="radio" name="radio_${n}" value="1" 
@@ -152,10 +151,10 @@ const insertNewQuestion = function (n) {
                 <div class="qcm_choix_zone" id="qcm_choix_zone_${n}">
                 </div>
             </div>
-    </div>
         `
     let newdiv = document.createElement("div");
     newdiv.innerHTML = HTML;
+    newdiv.classList.add("question")
     document.getElementById("questions").appendChild(newdiv);
 }
 

@@ -1,0 +1,46 @@
+
+.radio_btn {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+
+.qcm_choix_zone {
+    margin-left: 40px;
+}
+
+.qcm_choix_zone input {
+    width: 80%;
+    padding: 7px;
+    font-size: 1.1em;
+    line-height: 0.5;
+}
+
+.qcm_choix_zone .submit_btn {
+    width: 55px;
+    height: 55px;
+    font-size: 2em;
+}
+
+.titre_questionnaire{
+    width: 60%;
+}
+
+#questions {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.question {
+    width: 640px !important;
+}
+
+.form {
+    width: 95% !important;
+}
+
+@media only screen and (max-device-width:1000px) {
+    .question {
+        width: 80% !important;
+    }
+}

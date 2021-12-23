@@ -1,6 +1,6 @@
 {% extends "components/base.html" %}
 {% block css %}
-    <link rel="stylesheet" type="text/css" href= "{{ url_for('static', filename='css/data_tab.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/data_tab.css') }}"/>
 {% endblock %}
 {% block title %}
     LISTE DES CONFÉRENCES
@@ -20,7 +20,7 @@
         </thead>
         <tbody>
         {% for conf in data_tab %}
-            <tr style = "cursor: pointer;" onclick="document.location = 'conference/{{ conf.id }}'">
+            <tr style="cursor: pointer;" onclick="document.location = 'conference/{{ conf.id }}'">
                 <td>{{ conf.id }}</td>
                 <td><a href="conference/{{ conf.id }}">{{ conf.titre }}</a></td>
                 <td>{{ conf.theme }}</td>
@@ -30,6 +30,11 @@
         {% endfor %}
         </tbody>
     </table>
+    <form action="{{ url_for("nouvelle_conference") }}" method="get">
+        <div class="box_btn">
+            <button class="btn" type="submit">Créer une conférence de citoyens</button>
+        </div>
+    </form>
 {% endblock %}
 
 

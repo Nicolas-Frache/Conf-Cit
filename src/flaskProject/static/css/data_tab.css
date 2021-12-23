@@ -28,3 +28,8 @@ a:hover, a:visited, a:link, a:active {
     padding: 20px 15px;
     max-width: min-content;
 }
+
+.btn_in_tab {
+    font-size: 1.2em;
+    padding: 10px;
+}
