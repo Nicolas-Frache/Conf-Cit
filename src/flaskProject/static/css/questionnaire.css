@@ -39,6 +39,14 @@
     width: 95% !important;
 }
 
+.input_range {
+    width: 71%;
+}
+
+.input_range_number {
+    width: 80px;
+}
+
 @media only screen and (max-device-width:1000px) {
     .question {
         width: 80% !important;

@@ -1,0 +1,47 @@
+{% extends "components/base.html" %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/questionnaire.css') }}"/>
+{% endblock %}
+
+{% block title %}
+    Création d'une conférence de citoyens
+{% endblock %}
+
+{% block content %}
+    <p>Merci de remplir les champs ci-dessous: </p>
+    <form method="post" enctype="multipart/form-data"
+          action="{{ url_for("nouvelle_conference_post") }}">
+        <div id="questions">
+            <div class="question">
+                <h2>Informations générales</h2>
+                <div class="form">
+                    <h2>Titre de la conférence</h2>
+                    <input type="text" name="titre" class="longInput" required="">
+
+                    <h2>Thème géneral</h2>
+                    <input type="text" class="longInput" name="theme" required="">
+
+                    <h2>Description de la conférence</h2>
+                    <textarea class="longInput" name="desc" rows="5" cols="60"
+                              placeholder="Saisir la description"></textarea>
+                </div>
+            </div>
+            <div class="question">
+                <h2>Choix des participants</h2>
+                <div class="form">
+                    <p>Nombre de citoyens sur la plateforme: <b>{{ nb_citoyens }}</b>.</p>
+                    <p>Merci de sélectionner la taille du panel aléatoire qui participera à cette conférence :</p>
+                    <div style="border: 1px solid black;">
+                        <input class="input_range" type="range" value="200" min="0"
+                               max="{{ nb_citoyens }}" step="20" oninput="this.nextElementSibling.value = this.value">
+
+                        <input name="taille_panel" class="input_range_number" type="number" min="0" max="{{ nb_citoyens }}" step="5"
+                               value="200" onchange="this.previousElementSibling.value = this.value">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="center"><input type="submit" class="submit_btn" value="Valider"></p>
+    </form>
+{% endblock %}

@@ -5,6 +5,7 @@ from flask import g
 
 # Classes relatives aux tables de la base de données pour SQLAlchemy
 from model.classes import *
+import random
 
 # Création de l'application
 app = Flask(__name__)
@@ -136,7 +137,7 @@ def se_connecter_post():
                                header=get_header(),
                                error="Erreur lors de la saisie des identifiants",
                                redirect=redirect_url)
-    flash('Vous êtes maintenant connecté')
+    flash('Vous êtes maintenant connecté', 'sucess')
     resp = make_response(redirect(redirect_url))
     resp.set_cookie("username", nom)
     return resp
@@ -146,23 +147,40 @@ def se_connecter_post():
 def nouvelle_conference():
     if not is_logged():
         return render_template("pages/acessWall.html", page_title="Nouvelle conférence", header=get_header())
-    return render_template("pages/nouvelleConference.html", header=get_header())
+    nb_citoyens = Utilisateur.query.count()
+    return render_template("pages/creationConference.html", nb_citoyens=nb_citoyens, header=get_header())
 
 
 @app.route("/nouvelleConference", methods=['POST'])
 def nouvelle_conference_post():
+    nb_citoyens = Utilisateur.query.count()
     # Valeur dans le formulaire
     titre = request.form.get("titre", default="")
     theme = request.form.get("theme", default="")
     desc = request.form.get("desc", default="")
+    taille_panel = request.form.get("taille_panel")
+    print(taille_panel)
+
     if titre.strip() == "":
         # Erreur si le titre est vide
         flash("Le titre ne peut être vide", "error")
+        return redirect(url_for("nouvelle_conference"))
+    if not taille_panel.isnumeric() or int(taille_panel) <= 0 or int(taille_panel) > nb_citoyens:
+        # Erreur si la taille du panel de citoyens n'est pas valide
+        flash(f"Le taille du panel de citoyens doit être entier positif inférieur ou égale au nombre de "
+              f"citoyens inscrits ({nb_citoyens})", "error")
         return redirect(url_for("nouvelle_conference"))
     try:
         # Ajout de la conférence dans la base
         conference = Conference(titre=titre, theme=theme, description=desc)
         db.session.add(conference)
+        db.session.commit()
+
+        # Ajout des n participants aléatoires sans répétitions
+        listeIndexAleatoires = random.sample(range(0, nb_citoyens), int(taille_panel))
+        for i in listeIndexAleatoires:
+            db.session.add(Participe(idUtilisateur=Utilisateur.query[i].id,
+                                     idConference=conference.id))
         db.session.commit()
     except Exception as e:
         return render_template("pages/error.html", error=str(e), header=get_header())
@@ -201,7 +219,7 @@ def nouveau_questionnaire(idConference):
                  "sur la page de la conférence de citoyens associée (url de type /conference/<idConference>)"
         return render_template("pages/error.html", error=erreur, header=get_header())
     conference = Conference.query.filter_by(id=idConference).first()
-    return render_template("pages/formulaireCreationQuestionnaire.html", header=get_header(), conference=conference)
+    return render_template("pages/creationQuestionnaire.html", header=get_header(), conference=conference)
 
 
 @app.route("/nouveauQuestionnaire", methods=['POST'])
@@ -238,7 +256,7 @@ def nouveau_questionnaire_post():
     except Exception as e:
         return render_template("pages/error.html", error="Le contenu du formulaire est mal construit",
                                header=get_header())
-    flash("Questionnaire crée avec succès")
+    flash("Questionnaire crée avec succès", "sucess")
     return redirect(url_for("page_conference", idConference=int(form["id_conf"])))
 
 
@@ -255,7 +273,8 @@ def afficher_questionnaire(idQuestionnaire):
         return render_template("pages/error.html", error=str(e), header=get_header())
     colonnes = {"id": "Numéro", "nom": "Nom", "prenom": "Prénom",
                 "sexe": "Sexe", "profession": "Profession actuelle", "dateNaissance": "Date de Naissance"}
-    return render_template('pages/questionnaire.html', header=get_header(), quest=questionnaire, conf=conference, qu=questions, part=[colonnes, participants])
+    return render_template('pages/questionnaire.html', header=get_header(), quest=questionnaire, conf=conference,
+                           qu=questions, part=[colonnes, participants])
 
 
 @app.route("/resultat/<idQuestionnaire>")
