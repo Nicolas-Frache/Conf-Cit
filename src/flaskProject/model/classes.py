@@ -1,24 +1,17 @@
 # Base (très largement modifiée) générée avec la librairie : flask-sqlacodegen et la commande :
 # flask-sqlacodegen.exe sqlite:///database\database.db --flask --notables
-import os
 import random
-
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from datetime import date, timedelta
 
 from faker import Faker
-from datetime import datetime, date, timedelta
+from flask_sqlalchemy import SQLAlchemy
 
-DATABASE = f'..{os.sep}database{os.sep}database.db'
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DATABASE}"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 
 
-def populate_with_random():
+def populate_with_random(number=1000):
     fake = Faker("fr_FR")
-    for _ in range(1000):
+    for _ in range(number):
         utilisateur = Utilisateur(
             nom=fake.last_name(),
             prenom=fake.first_name(),
