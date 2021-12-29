@@ -324,3 +324,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/python,osx,windows,linux,visualstudiocode,pycharm
+
+src/flaskProject/project/database/database_test.db
+
+src/flaskProject/project/database/database.db
