@@ -9,6 +9,10 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
+def getTrue():
+    return True
+
+
 def populate_with_random(number=1000):
     fake = Faker("fr_FR")
     for _ in range(number):

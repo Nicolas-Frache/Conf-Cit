@@ -5,20 +5,18 @@ from time import sleep
 import pytest
 from flask_sqlalchemy import SQLAlchemy
 
-from ..model.classes import *
+
+from project.database.classes import *
 
 
-@pytest.fixture
-def getTrue(autouse=False):
-    return True
-
-
-def test_dummy(getTrue):
+def test_dummy():
     # print(Utilisateur.query.count())
-    # sleep(2)
-    assert getTrue
+    assert getTrue()
 
 
-def test_dummy2(getTrue):
+def test_dummy2():
+    user = Utilisateur(nom="Nom", prenom="Prenom")
+    db.session.add(user)
+    db.session.commit()
     print(Utilisateur.query.count())
-    assert getTrue
+    assert getTrue()

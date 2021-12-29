@@ -1,8 +1,8 @@
 import pytest
 from flask_sqlalchemy import SQLAlchemy
 
-from .. import initdb_with_sql_file, delete_db_file
-from . import create_app
+from project import initdb_with_sql_file, delete_db_file, db
+from . import create_app, app_test
 
 
 # Méthode qui s'execute automatiquement au début de l'éxecution de chaque méthode de test
@@ -11,8 +11,10 @@ from . import create_app
 # Réinitialise la base de données de test pour chaque classe de test
 @pytest.fixture(autouse=True)
 def reset_test_database():
-    db = SQLAlchemy()
-    db.drop_all(app=create_app())
+    from sqlalchemy import MetaData
+    m = MetaData(db.engine)
+    m.reflect()
+    m.drop_all()
     initdb_with_sql_file(test=True)
     print("************** RESET DB **************")
 
@@ -23,5 +25,7 @@ def reset_test_database():
 def init_and_cleanup(request):
     def clean_db_test_file():
         print("************** CLEANUP ****************")
-        delete_db_file(test=True)
+        # TODO Problème de verrou sur le fichier avec windows, à voir
+        # delete_db_file(test=True)
+
     request.addfinalizer(clean_db_test_file)

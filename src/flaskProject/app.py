@@ -1,10 +1,11 @@
 import traceback
 
 from flask import *
+from project import create_app, delete_db_file, initdb_with_sql_file
 
 # Classes relatives aux tables de la base de données pour SQLAlchemy
-from model.classes import *
-from . import create_app, delete_db_file, initdb_with_sql_file
+from project.database.classes import *
+
 
 # Création de l'application
 app = create_app()
