@@ -328,3 +328,6 @@ $RECYCLE.BIN/
 src/flaskProject/project/database/database_test.db
 
 src/flaskProject/project/database/database.db
+*.db
+
+.idea/

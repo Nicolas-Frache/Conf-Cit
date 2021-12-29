@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <!- indiquer votre mail pour les tests ->
+    <!-- indiquer votre mail pour les tests -->
     <?php
     $retour = mail('clement.wenger@telecomnancy.eu', 'Envoi depuis la page Erreur', $_POST['message'], 'From : conf-civ@telecomnancy.eu');
     if ($retour) {

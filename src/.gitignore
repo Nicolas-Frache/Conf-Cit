@@ -1,5 +1,6 @@
 env/
 pyvenv.cfg
-.idea
-flaskProject/database/database.db
+*.idea
+*.db
 flaskProjet/__pycache__
+vcs.xml
