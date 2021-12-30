@@ -1,8 +1,6 @@
 import pytest
-from flask_sqlalchemy import SQLAlchemy
 
-from project import initdb_with_sql_file, delete_db_file, db
-from . import create_app, app_test
+from project import initdb_with_sql_file, db
 
 
 # Méthode qui s'execute automatiquement au début de l'éxecution de chaque méthode de test

@@ -1,6 +1,5 @@
-import os
-
 from flask_sqlalchemy import SQLAlchemy
+
 from project import create_app as parent_create_app
 
 
