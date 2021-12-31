@@ -1,0 +1,46 @@
+{% extends "components/base.html" %}
+
+{% block title %}
+    Répondre au questionnaire
+{% endblock %}
+{% block js %}
+    <script src="{{ url_for('static', filename='js/creationQuestionnaire.js') }}"></script>
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/questionnaire.css') }}"/>
+{% endblock %}
+
+{% block content %}
+    <p>Sur cette page vous pouvez soumettre votre réponse au questionnaire <u>{{ questionnaire.titre }}</u></p>
+    <form method="GET" enctype="multipart/form-data"
+          action="{{ url_for("nouveau_questionnaire_post") }}" name="reponseQuestionnaire">
+
+        <div id="questions">
+            {% for question in questions %}
+                <h2>Question #{{ question.numero }} - {{ question.contenu }}</h2>
+                <div class="form">
+                    {% if question.typeQuestion == "TEXTE" %}
+                        <h2>Réponse texte :</h2>
+
+                        <textarea class="longInput" name="texte_{{ question.id }}" rows="2" cols="60"
+                                  placeholder="Saisir la réponse à la question" required=""></textarea>
+                    {% else %}
+                        <h2>Réponse QCM :</h2>
+                        {% for choix_qcm in question.liste_choix_qcm %}
+                            <p>
+                                <input class="radio_btn" type="radio" name="q_{{ question.id }}"
+                                       id="q_{{ choix_qcm.id }}" value="{{ choix_qcm.id }}">
+                                <label for="q_{{ choix_qcm.id }}" class="reponse_choix_qcm">{{ choix_qcm.contenu }}</label>
+                            </p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="center">
+            <input class="submit_btn" type="submit" value="Soumettre les réponses">
+        </div>
+        <input type="hidden" name="id_utilisateur" value="{{  id_utilisateur }}"/>
+        <input type="hidden" name="id_questionnaire" value="{{ questionnaire.id }}"/>
+    </form>
+{% endblock %}

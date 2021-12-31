@@ -276,6 +276,19 @@ def resultats(idQuestionnaire):
     return render_template("pages/resultats.html", header=get_header(), id=idQuestionnaire, donnees=res)
 
 
+@app.route("/repondre/<int:idquestionnaire>", methods=['GET'])
+def repondre_questionnaire(idquestionnaire):
+    # Erreur 404 si le questionnaire n'existe pas
+    questionnaire = Questionnaire.query.filter_by(id=idquestionnaire).first_or_404()
+    # On construit une liste de tuple de (Question, ChoixQCM)
+    questions = Question.query.filter_by(idQuestionnaire=idquestionnaire).order_by(Question.numero).all()
+    # TODO utiliser l'id de l'utilisateur connecté
+    id_utilisateur = 1
+
+    return render_template("pages/reponseQuestionnaire.html", header=get_header(), questions=questions,
+                           questionnaire=questionnaire, id_utilisateur=id_utilisateur)
+
+
 # Pour l'execution en ligne de commande directement avec 'Python3 app.py'
 if __name__ == '__main__':
     app.run()

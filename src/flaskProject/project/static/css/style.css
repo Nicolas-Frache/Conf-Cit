@@ -20,6 +20,10 @@ p {
     color: white;
 }
 
+.reponse_choix_qcm {
+    font-size: 1.1em;
+}
+
 .red {background-color: red;}
 
 img {
@@ -56,7 +60,6 @@ img {
 
 input, textarea {
     font-family: inherit;
-    font-size: inherit;
     background-color: white;
     border: none;
     border-radius: 3px;
