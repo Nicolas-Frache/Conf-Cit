@@ -9,6 +9,6 @@ def create_app():
     return app_tmp
 
 
-app_test = create_app()
-app_test.app_context().push()
-db = SQLAlchemy(app_test)
+app = create_app()
+app.app_context().push()
+db = SQLAlchemy(app)

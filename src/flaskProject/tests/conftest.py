@@ -14,7 +14,6 @@ def reset_test_database():
     m.reflect()
     m.drop_all()
     initdb_with_sql_file(test=True)
-    print("************** RESET DB **************")
 
 
 # Supprime le fichier de la base de données de test à la fin de la session de test
@@ -22,7 +21,7 @@ def reset_test_database():
 @pytest.fixture(scope="session", autouse=True)
 def init_and_cleanup(request):
     def clean_db_test_file():
-        print("************** CLEANUP ****************")
+        pass
         # TODO Problème de verrou sur le fichier avec windows, à voir
         # delete_db_file(test=True)
 

@@ -1,11 +1,13 @@
 import traceback
+from datetime import datetime, timedelta
 
+from faker.generator import random
 from flask import *
 
-from populate import populate_with_random
 from project import create_app, delete_db_file, initdb_with_sql_file
 # Classes relatives aux tables de la base de données pour SQLAlchemy
 from project.database.classes import *
+from project.database.populate import populate_with_random
 
 # Création de l'application
 app = create_app()
@@ -36,20 +38,28 @@ def get_header():
     return header
 
 
-@app.route('/')
-@app.route('/home')
+@app.route('/', methods=['GET'])
+@app.route('/home', methods=['GET'])
 def home():
+    print("test")
     return render_template("pages/home.html", header=get_header())
 
 
-@app.route('/listeCitoyens')
+@app.route('/listeCitoyens', methods=['GET'])
 def lister_citoyens():
     try:
+        db.session.rollback()
         # données: "select * from Utilisateur"
         user_list = Utilisateur.query.all()
-        #   2 - On crée directement ce qui nous intéresse
+        # On renomme les colonnes qui seront affichées
         colonnes = {"id": "Numéro", "nom": "Nom", "prenom": "Prénom",
                     "sexe": "Sexe", "profession": "Profession actuelle", "dateNaissance": "Date de Naissance"}
+        # Reformattage des dates de naissances utilisateurs au format français
+        for user in user_list:
+            dn = user.dateNaissance.split("-")
+            user = Utilisateur(id=user.id, nom=user.nom, prenom=user.prenom, sexe=user.sexe,
+                               profession=user.profession, dateNaissance=user.dateNaissance)
+            user.dateNaissance = f"{dn[2]}/{dn[1]}/{dn[0]}"
     except Exception as e:
         print(traceback.format_exc())
         return render_template("pages/error.html", error=str(e), header=get_header())
@@ -156,10 +166,17 @@ def nouvelle_conference_post():
 def page_conference(idConference):
     # Recherche la conférence associée à l'argument et lance une 404 si elle n'existe pas (propre à flask-sqlAlchemy)
     conference = Conference.query.filter_by(id=idConference).first_or_404()
-    participants = Utilisateur.query.join(Participe).filter(Participe.idConference == idConference)
+    participants = Utilisateur.query.join(Participe).filter(Participe.idConference == idConference).all()
+    # On associe le nom des attributs du modèle au nom des colonnes à afficher
     colonnes = {"id": "Numéro", "nom": "Nom", "prenom": "Prénom",
                 "sexe": "Sexe", "profession": "Profession actuelle", "dateNaissance": "Date de Naissance"}
+
     questionnaires = conference.questionnaires
+    # Reformattage des dates de création du format    "UTC: YYYY-MM-DD hh:mm:ss"
+    #                                               à "UTC+1: DD/MM/YYYY hh:mm"
+    for questionnaire in questionnaires:
+        datetime_object = datetime.strptime(questionnaire.dateFermeture, '%Y-%m-%d %H:%M:%S') + timedelta(hours=1)
+        questionnaire.dateFermeture = datetime_object.strftime("%d/%m/%Y %H:%M")
     return render_template("pages/conference.html", header=get_header(), questionnaires=questionnaires,
                            conf=conference, participants=[colonnes, participants])
 

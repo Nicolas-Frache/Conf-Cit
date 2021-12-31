@@ -11,7 +11,6 @@ db = SQLAlchemy()
 
 # Crée un objet app et son lien avec la base de données
 def create_app(test=False):
-    print("dev")
     app_tmp = Flask(__name__, template_folder="templates", static_folder="static")
     app_tmp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     if test:

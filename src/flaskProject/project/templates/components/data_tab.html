@@ -13,12 +13,18 @@
         </tr>
     </thead>
     <tbody>
-        {% for objet in data[1] %}
-            <tr>
-                {% for key in data[0].keys() %}
-                    <td> {{ objet[key] }} </td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
+        {% if data[1]|length != 0 %}
+            {% for objet in data[1] %}
+                <tr>
+                    {% for key in data[0].keys() %}
+                        <td> {{ objet[key] }} </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        {%  else %}
+            <td colspan="{{ data[0]|length }}">
+                Aucune donnée à afficher
+            </td>
+        {% endif %}
     </tbody>
 </table>
