@@ -57,10 +57,13 @@ def lister_citoyens():
                     "sexe": "Sexe", "profession": "Profession actuelle", "dateNaissance": "Date de Naissance"}
         # Reformattage des dates de naissances utilisateurs au format français
         for user in user_list:
-            dn = user.dateNaissance.split("-")
-            user = Utilisateur(id=user.id, nom=user.nom, prenom=user.prenom, sexe=user.sexe,
-                               profession=user.profession, dateNaissance=user.dateNaissance)
-            user.dateNaissance = f"{dn[2]}/{dn[1]}/{dn[0]}"
+            try:
+                dn = user.dateNaissance.split("-")
+                user = Utilisateur(id=user.id, nom=user.nom, prenom=user.prenom, sexe=user.sexe,
+                                   profession=user.profession, dateNaissance=user.dateNaissance)
+                user.dateNaissance = f"{dn[2]}/{dn[1]}/{dn[0]}"
+            except AttributeError as e:
+                print(traceback.format_exc())
     except Exception as e:
         print(traceback.format_exc())
         return render_template("pages/error.html", error=str(e), header=get_header())
@@ -251,7 +254,6 @@ def afficher_questionnaire(idQuestionnaire):
         conference = Conference.query.filter(questionnaire.idConference == Conference.id).all()[0]
         questions = Question.query.filter(Question.idQuestionnaire == idQuestionnaire)
         participants = Utilisateur.query.join(Participe).filter(Participe.idConference == conference.id).all()
-        print(participants)
     except Exception as e:
         print(traceback.format_exc())
         return render_template("pages/error.html", error=str(e), header=get_header())
