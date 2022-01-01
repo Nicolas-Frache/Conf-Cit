@@ -1,6 +1,12 @@
 import dateutil.utils
+import pytest
 
 from project.database.classes import *
+
+
+@pytest.fixture(autouse=True)
+def autocommit():
+    db.session.close()
 
 
 def test_utilisateur_nouveau():

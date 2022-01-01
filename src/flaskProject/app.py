@@ -9,9 +9,9 @@ from project import create_app, delete_db_file, initdb_with_sql_file
 from project.database.classes import *
 from project.database.populate import populate_with_random
 
-# Création de l'application
-from utils_questionnaire import process_reponse_questionnaire
+from project.database.utils_questionnaire import process_reponse_questionnaire
 
+# Création de l'application
 app = create_app()
 # Lien avec la base de données
 db = SQLAlchemy(app)
@@ -50,7 +50,6 @@ def home():
 @app.route('/listeCitoyens', methods=['GET'])
 def lister_citoyens():
     try:
-        db.session.rollback()
         # données: "select * from Utilisateur"
         user_list = Utilisateur.query.all()
         # On renomme les colonnes qui seront affichées
@@ -297,10 +296,10 @@ def repondre_questionnaire_post():
     except Exception as error:
         print(traceback.format_exc())
         db.session.rollback()
-        return render_template("pages/error.html", error=error,
+        return render_template("pages/error.html", error=error.value.args[0],
                                header=get_header())
     flash("Réponses au questionnaire soumises avec succès", "sucess")
-    idConf = Questionnaire.query.filter_by(id=form["id_questionnaire"]).first().idConference
+    idConf = Questionnaire.query.filter_by(id=request.form["id_questionnaire"]).first().idConference
     return redirect(url_for("page_conference", idConference=int(idConf)))
 
 
