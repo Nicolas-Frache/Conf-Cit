@@ -10,6 +10,8 @@ from project.database.classes import *
 from project.database.populate import populate_with_random
 
 # Création de l'application
+from utils_questionnaire import process_reponse_questionnaire
+
 app = create_app()
 # Lien avec la base de données
 db = SQLAlchemy(app)
@@ -210,7 +212,7 @@ def nouveau_questionnaire_post():
         form = request.form
         # Cas d'erreur si la conférence correspondante n'est pas valide
         if Conference.query.filter_by(id=form["id_conf"]).count() == 0:
-            raise Exception('La conférence du formulaire n\'existe pas')
+            raise Exception()
         # Création du questionnaire (on le commit directement car on a besoin de l'id généré après)
         questionnaire: Questionnaire = Questionnaire(titre=form["titre_questionnaire"],
                                                      idConference=form["id_conf"])
@@ -284,9 +286,22 @@ def repondre_questionnaire(idquestionnaire):
     questions = Question.query.filter_by(idQuestionnaire=idquestionnaire).order_by(Question.numero).all()
     # TODO utiliser l'id de l'utilisateur connecté
     id_utilisateur = 1
-
     return render_template("pages/reponseQuestionnaire.html", header=get_header(), questions=questions,
                            questionnaire=questionnaire, id_utilisateur=id_utilisateur)
+
+
+@app.route("/repondre", methods=['POST'])
+def repondre_questionnaire_post():
+    try:
+        process_reponse_questionnaire(request.form)
+    except Exception as error:
+        print(traceback.format_exc())
+        db.session.rollback()
+        return render_template("pages/error.html", error=error,
+                               header=get_header())
+    flash("Réponses au questionnaire soumises avec succès", "sucess")
+    idConf = Questionnaire.query.filter_by(id=form["id_questionnaire"]).first().idConference
+    return redirect(url_for("page_conference", idConference=int(idConf)))
 
 
 # Pour l'execution en ligne de commande directement avec 'Python3 app.py'

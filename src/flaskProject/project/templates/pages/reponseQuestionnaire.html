@@ -12,8 +12,8 @@
 
 {% block content %}
     <p>Sur cette page vous pouvez soumettre votre réponse au questionnaire <u>{{ questionnaire.titre }}</u></p>
-    <form method="GET" enctype="multipart/form-data"
-          action="{{ url_for("nouveau_questionnaire_post") }}" name="reponseQuestionnaire">
+    <form method="POST" enctype="multipart/form-data"
+          action="{{ url_for("repondre_questionnaire_post") }}" name="reponseQuestionnaire">
 
         <div id="questions">
             {% for question in questions %}
