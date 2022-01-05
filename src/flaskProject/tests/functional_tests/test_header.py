@@ -59,8 +59,8 @@ def test_deconnecte_cookie():
 def test_redirect_deconnexion():
     """
     AVEC une application flask de test
-    QUAND la page '/home' page est appellée (GET) et qu'un utilisateur connecté se déconnecte
-    ALORS on vérifie que le cookie de connexion n'existe plus
+    QUAND un utilisateur se connecte
+    ALORS on vérifie que la redirection qu'il reçoit est la bonne (vers la page depuis laquelle il se connecte)
     """
     with app.test_client() as test_client:
         response = test_client.get('/home')
