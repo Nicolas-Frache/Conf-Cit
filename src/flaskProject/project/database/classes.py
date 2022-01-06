@@ -85,10 +85,10 @@ class Question(db.Model):
 class ChoixQcm(db.Model):
     __tablename__ = 'choixQcm'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     numero = db.Column(db.Integer)
     contenu = db.Column(db.String(100))
-    idQuestion = db.Column(db.ForeignKey(Question.id), primary_key=True)
+    idQuestion = db.Column(db.ForeignKey(Question.id))
 
     reponses_qcm = db.relationship('ReponseQcm',
                                    primaryjoin='ReponseQcm.idChoix == ChoixQcm.id',

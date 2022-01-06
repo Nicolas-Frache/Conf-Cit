@@ -1,4 +1,4 @@
-{%extends "components/base.html" %}
+{% extends "components/base.html" %}
 
 {% block title %}
     Page d'accueil
@@ -12,26 +12,38 @@
         <div class="box_btn">
             <button class="btn" type="submit">S'identifier</button>
         </div>
-        <input type="hidden" name="redirect" value="{{ url_for(request.endpoint, **request.view_args) }}" />
+        <input type="hidden" name="redirect" value="{{ url_for(request.endpoint, **request.view_args) }}"/>
     </form>
 
     <p>Vous voulez simplement explorer les conférence de citoyens passées et en cours ?</p>
     <form action="/conference" method="get">
         <div class="box_btn">
-            <button class="btn" name="seConnecterBtn" type="submit">Explorer</button>
+            <button class="btn" type="submit">Explorer</button>
+        </div>
+    </form>
+    <p>(ADMIN) Visualiser la liste des citoyens inscrits sur le site :</p>
+    <form action="/listeCitoyens" method="GET">
+        <div class="box_btn">
+            <button class="btn" type="submit">Liste des citoyens</button>
         </div>
     </form>
 
     <p><b>Qu'est-ce que Conf-Cit.org ?</b></p>
-    <div class="form">Conf-Cit.org est un service vous permettant d'organiser des conférences de citoyens en ligne.<br><br>
-    Une <a href="https://fr.wikipedia.org/wiki/Conf%C3%A9rence_de_citoyens">conférence de citoyens</a> est le fait
-    d'interroger des citoyens d'une commune au sort sur des sujets variés dans le but d'obtenir une réponse rapidement
-    de la part d'une population variée.<br><br>
-    En France, il y a eu un nombre relativement réduit de conférences de citoyens à l’échelle nationale, mais on
-    peut citer par exemple celle de 1998 sur les organismes génétiquement modifiés, ou encore celle autour de Cigéo, le
-    centre de stockage géologique de Bure, en 2013.<br><br>
-    L’objectif de notre application est donc d’organiser et de gérer ces conférences de citoyens pour une ville donnée,
-    que ce soit du côté des citoyens qui seront ou non tirés au sort, ou du côté des organisateurs de la consultation.
+    <div class="desc">
+        <p>Conf-Cit.org est un service vous permettant d'organiser des conférences de citoyens en
+            ligne.</p>
+
+        <p>Une conférence de citoyens est une
+            procédure moderne qui permet aux élus locaux de prendre le pouls de la population sur un sujet
+            polémique.</p>
+
+        <p>En France, il y a eu un nombre relativement réduit de conférences de citoyens à l’échelle nationale, mais on
+            peut citer par exemple celle autour de Cigéo, le centre de stockage géologique de Bure, en 2013.</p>
+
+        <p>L’objectif de cette application est donc d’organiser et de gérer ces conférences de citoyens pour une ville
+            à une echelle locale.
+            Les organisateurs peuvent ainsi créer des conférences de citoyens et des questionnaires associés, et les
+            citoyens peuvent y participer s'ils sont tirés au sort.</p>
     </div>
 {% endblock %}
 

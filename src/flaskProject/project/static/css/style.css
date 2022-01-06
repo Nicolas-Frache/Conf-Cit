@@ -51,6 +51,19 @@ img {
     border-radius: 5px;
 }
 
+.desc {
+    border: 2px solid white;
+    width: 65%;
+    margin: 20px;
+    border-radius: 5px;
+    padding: 15px;
+    text-justify: inter-word;
+}
+
+.desc p {
+    font-size: 1.25em;
+}
+
 .form h3 {
     margin: 10px;
     font-size: 1.8em;

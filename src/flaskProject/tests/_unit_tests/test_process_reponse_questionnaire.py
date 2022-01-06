@@ -1,12 +1,13 @@
-import traceback
-
 import pytest
 from project.database.utils_questionnaire import process_reponse_questionnaire
 from project.database.classes import *
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def donnees_test():
+    """
+    Crée et insère dans la base des données de test automatiquement à chaque début de test
+    """
     db.session.close()
     # Création questionnaires
     # 1 - complet
@@ -42,7 +43,7 @@ def donnees_test():
     db.session.commit()
 
 
-def test_process_reponse_questionnaire_avec_utilisateur_inexistant(donnees_test):
+def test_process_reponse_questionnaire_avec_utilisateur_inexistant():
     """
     AVEC un id d'utilisateur inexistant
     QUAND on appelle process_reponse_questionnaire avec cet utilisateur dans le formulaire
@@ -53,7 +54,7 @@ def test_process_reponse_questionnaire_avec_utilisateur_inexistant(donnees_test)
     assert exception.value.args[1] == "E001"
 
 
-def test_process_reponse_questionnaire_avec_questionnaire_inexistant(donnees_test):
+def test_process_reponse_questionnaire_avec_questionnaire_inexistant():
     """
     AVEC un id de conférence inexistant
     QUAND on appelle process_reponse_questionnaire avec cette conférence dans le formulaire
@@ -64,7 +65,7 @@ def test_process_reponse_questionnaire_avec_questionnaire_inexistant(donnees_tes
     assert exception.value.args[1] == "E002"
 
 
-def test_process_reponse_questionnaire_avec_utilisateur_non_participant(donnees_test):
+def test_process_reponse_questionnaire_avec_utilisateur_non_participant():
     """
     AVEC un id d'utilisateur existant mais ne participant pas à la conférence de citoyens
     QUAND on appelle process_reponse_questionnaire avec cet utilisateur dans le formulaire
@@ -75,7 +76,7 @@ def test_process_reponse_questionnaire_avec_utilisateur_non_participant(donnees_
     assert exception.value.args[1] == "E003"
 
 
-def test_process_reponse_questionnaire_avec_utilisateur_ayant_deja_repondu(donnees_test):
+def test_process_reponse_questionnaire_avec_utilisateur_ayant_deja_repondu():
     """
     AVEC un id d'utilisateur existant ayant déja répondu au questionnaire
     QUAND on appelle process_reponse_questionnaire avec cet utilisateur dans le formulaire
@@ -86,7 +87,7 @@ def test_process_reponse_questionnaire_avec_utilisateur_ayant_deja_repondu(donne
     assert exception.value.args[1] == "E004"
 
 
-def test_process_reponse_questionnaire_formulaire_mal_construit_donnees_manquantes(donnees_test):
+def test_process_reponse_questionnaire_formulaire_mal_construit_donnees_manquantes():
     """
     AVEC un des données d'entrées insuffisantes (champs manquant)
     QUAND on appelle process_reponse_questionnaire avec cet utilisateur dans le formulaire
@@ -115,7 +116,7 @@ def test_process_reponse_questionnaire_formulaire_mal_construit_donnees_manquant
         assert exception.value.args[1] == "E000"
 
 
-def test_process_reponse_questionnaire_formulaire_choixqcm_inexistant(donnees_test):
+def test_process_reponse_questionnaire_formulaire_choixqcm_inexistant():
     """
     AVEC une réponse correspondant à un choix de QCM inexistant
     QUAND on appelle process_reponse_questionnaire avec ces données d'entrées
@@ -132,7 +133,7 @@ def test_process_reponse_questionnaire_formulaire_choixqcm_inexistant(donnees_te
     assert exception.value.args[1] == "E005"
 
 
-def test_process_reponse_questionnaire_formulaire_incoherence_choixqcm(donnees_test):
+def test_process_reponse_questionnaire_formulaire_incoherence_choixqcm():
     """
     AVEC une réponse correspondant à un choix de QCM d'une autre question
     QUAND on appelle process_reponse_questionnaire avec ces données d'entrées
@@ -144,7 +145,7 @@ def test_process_reponse_questionnaire_formulaire_incoherence_choixqcm(donnees_t
     assert exception.value.args[1] == "E006"
 
 
-def test_process_reponse_questionnaire_valide(donnees_test):
+def test_process_reponse_questionnaire_valide():
     """
     AVEC une réponse valide
     QUAND on appelle process_reponse_questionnaire avec ces données d'entrées

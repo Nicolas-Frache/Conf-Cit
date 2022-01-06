@@ -9,17 +9,6 @@
     <p>Une erreur s'est produite</p>
     {% if error is defined %}
         <p><u>Description de l'erreur:</u> {{ error }}</p>
-        
-        <!- exceptions levée par listeCitoyens->
-    {% endif %}
-    <p> <a href="/home">Retour à l'accueil</a> </p>
-    
-
-    <form method="post" action="mail.php">
-        <label>En cas d'erreur inconnu, envoyez-nous un e-mail(Merci d'indiquer votre mail ou votre id si vous souhaitez une réponse).</label>
-        <textarea rows="10" cols="30" name="message"></textarea>
-        <input type="submit">
-    </form>
 {% endblock %}
 
 

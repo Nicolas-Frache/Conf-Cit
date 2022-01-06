@@ -9,7 +9,7 @@ from project import create_app, delete_db_file, initdb_with_sql_file
 from project.database.classes import *
 from project.database.populate import populate_with_random
 
-from project.database.utils_questionnaire import process_reponse_questionnaire
+from project.database.utils_questionnaire import process_reponse_questionnaire, process_creation_questionnaire_data
 
 # Création de l'application
 app = create_app()
@@ -40,10 +40,20 @@ def get_header():
     return header
 
 
+def handle_error(error):
+    print(traceback.format_exc())
+    db.session.rollback()
+
+    if hasattr(error, "value"):
+        message = error.value.args[0]
+    else:
+        message = str(error)
+    return render_template("pages/error.html", error=message, header=get_header())
+
+
 @app.route('/', methods=['GET'])
 @app.route('/home', methods=['GET'])
 def home():
-    print("test")
     return render_template("pages/home.html", header=get_header())
 
 
@@ -64,9 +74,8 @@ def lister_citoyens():
                 user.dateNaissance = f"{dn[2]}/{dn[1]}/{dn[0]}"
             except AttributeError as e:
                 print(traceback.format_exc())
-    except Exception as e:
-        print(traceback.format_exc())
-        return render_template("pages/error.html", error=str(e), header=get_header())
+    except Exception as error:
+        return handle_error(error)
     return render_template("pages/listeCitoyens.html", data_tab=[colonnes, user_list], header=get_header())
 
 
@@ -158,9 +167,8 @@ def nouvelle_conference_post():
             db.session.add(Participe(idUtilisateur=Utilisateur.query[i].id,
                                      idConference=conference.id))
         db.session.commit()
-    except Exception as e:
-        print(traceback.format_exc())
-        return render_template("pages/error.html", error=str(e), header=get_header())
+    except Exception as error:
+        return handle_error(error)
     # Message de succès et redirection vers la page de la nouvelle conférence
     flash("Conférence de citoyens crée avec succès", "sucess")
     return redirect(url_for("page_conference", idConference=conference.id))
@@ -191,9 +199,8 @@ def lister_conferences():
     try:
         # données: "select * from Conference"
         conferences = Conference.query.all()
-    except Exception as e:
-        print(traceback.format_exc())
-        return render_template("pages/error.html", error=str(e), header=get_header())
+    except Exception as error:
+        return handle_error(error)
     return render_template("pages/listeConferences.html", data_tab=conferences, header=get_header())
 
 
@@ -212,35 +219,16 @@ def nouveau_questionnaire_post():
     try:
         # Construction des objets de base de données correspondants aux résultat du form
         form = request.form
-        # Cas d'erreur si la conférence correspondante n'est pas valide
-        if Conference.query.filter_by(id=form["id_conf"]).count() == 0:
-            raise Exception()
-        # Création du questionnaire (on le commit directement car on a besoin de l'id généré après)
-        questionnaire: Questionnaire = Questionnaire(titre=form["titre_questionnaire"],
-                                                     idConference=form["id_conf"])
-        db.session.add(questionnaire)
-        db.session.commit()
-        # Création des questions (qu'on commit à chaque fois pour la même raison)
-        for idxQuestion in range(1, int(form["nb_questions"]) + 1):
-            contenu = form[f"q_{idxQuestion}"]
-            typeQ = "TEXTE" if (int(form[f"radio_{idxQuestion}"]) == 1) else "QCM"
-            question: Question = Question(numero=idxQuestion,
-                                          typeQuestion=typeQ,
-                                          contenu=contenu,
-                                          idQuestionnaire=questionnaire.id)
-            db.session.add(question)
-            db.session.commit()
-            if typeQ == "QCM":
-                # Si c'est un QCM, création de tous les objets ChoixQcm nécessaires
-                for idxChoix in range(1, int(form[f"nb_choix_qcm_{idxQuestion}"]) + 1):
-                    choix_qcm: ChoixQcm = ChoixQcm(numero=idxChoix,
-                                                   contenu=form[f"qcm-{idxQuestion}-{idxChoix}"],
-                                                   idQuestion=question.id)
-                    db.session.add(choix_qcm)
-                db.session.commit()
-    except Exception:
+        process_creation_questionnaire_data(form)
+    except Exception as error:
         print(traceback.format_exc())
-        return render_template("pages/error.html", error="Le contenu du formulaire est mal construit",
+        db.session.rollback()
+
+        if hasattr(error, "value"):
+            message = error.value.args[0]
+        else:
+            message = error
+        return render_template("pages/error.html", error=message,
                                header=get_header())
     flash("Questionnaire crée avec succès", "sucess")
     return redirect(url_for("page_conference", idConference=int(form["id_conf"])))
@@ -254,9 +242,8 @@ def afficher_questionnaire(idQuestionnaire):
         conference = Conference.query.filter(questionnaire.idConference == Conference.id).all()[0]
         questions = Question.query.filter(Question.idQuestionnaire == idQuestionnaire)
         participants = Utilisateur.query.join(Participe).filter(Participe.idConference == conference.id).all()
-    except Exception as e:
-        print(traceback.format_exc())
-        return render_template("pages/error.html", error=str(e), header=get_header())
+    except Exception as error:
+        return handle_error(error)
     colonnes = {"id": "Numéro", "nom": "Nom", "prenom": "Prénom",
                 "sexe": "Sexe", "profession": "Profession actuelle", "dateNaissance": "Date de Naissance"}
     return render_template('pages/questionnaire.html', header=get_header(), quest=questionnaire, conf=conference,
@@ -296,10 +283,7 @@ def repondre_questionnaire_post():
     try:
         process_reponse_questionnaire(request.form)
     except Exception as error:
-        print(traceback.format_exc())
-        db.session.rollback()
-        return render_template("pages/error.html", error=error.value.args[0],
-                               header=get_header())
+        return handle_error(error)
     flash("Réponses au questionnaire soumises avec succès", "sucess")
     idConf = Questionnaire.query.filter_by(id=request.form["id_questionnaire"]).first().idConference
     return redirect(url_for("page_conference", idConference=int(idConf)))
