@@ -221,15 +221,7 @@ def nouveau_questionnaire_post():
         form = request.form
         process_creation_questionnaire_data(form)
     except Exception as error:
-        print(traceback.format_exc())
-        db.session.rollback()
-
-        if hasattr(error, "value"):
-            message = error.value.args[0]
-        else:
-            message = error
-        return render_template("pages/error.html", error=message,
-                               header=get_header())
+        return handle_error(error)
     flash("Questionnaire crée avec succès", "sucess")
     return redirect(url_for("page_conference", idConference=int(form["id_conf"])))
 

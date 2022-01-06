@@ -20,7 +20,13 @@ Création d'une application de conférence de citoyens :
 La municipalité peut créer des questionnaires en incluant éventuellement des formations.
 Ces questionnaires sont envoyés à un certain nombre de citoyens tirés au sort dans une base de donnée (éventuellement selon des critères).
 Ils peuvent alors y répondre.
-Cela permettera d'interroger rapidement l'opinon publique à propos de sujets variés.
+L'application permet d'interroger rapidement l'opinon publique à propos de sujets relatif à la vie de la société. L'accent est mis sur sa simplicité d'utilisation pour qu'une personne qui ne maitrise pas bien le numérique puisse utiliser notre application sans problèmes
+
+## 🌐 Site disponible en ligne 🌐
+
+L'application est disponible en ligne avec le lien suivant : http://confcit.xyz/ .
+Bien que parfaitement fonctionnelle, cette version semble instable. En particulier si plusieurs utilisateurs y accèdent en simultanés
+
 
 ### Convention pour les message de commits
 
