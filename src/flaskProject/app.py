@@ -65,7 +65,7 @@ def lister_citoyens():
         # On renomme les colonnes qui seront affichées
         colonnes = {"id": "Numéro", "nom": "Nom", "prenom": "Prénom",
                     "sexe": "Sexe", "profession": "Profession actuelle", "dateNaissance": "Date de Naissance"}
-        # Reformattage des dates de naissances utilisateurs au format français
+        # Reformatage des dates de naissances utilisateurs au format français
         for user in user_list:
             try:
                 dn = user.dateNaissance.split("-")
@@ -184,7 +184,7 @@ def page_conference(idConference):
                 "sexe": "Sexe", "profession": "Profession actuelle", "dateNaissance": "Date de Naissance"}
 
     questionnaires = conference.questionnaires
-    # Reformattage des dates de création du format    "UTC: YYYY-MM-DD hh:mm:ss"
+    # Reformatage des dates de création du format    "UTC: YYYY-MM-DD hh:mm:ss"
     #                                               à "UTC+1: DD/MM/YYYY hh:mm"
     for questionnaire in questionnaires:
         datetime_object = datetime.strptime(questionnaire.dateFermeture, '%Y-%m-%d %H:%M:%S') + timedelta(hours=1)
@@ -217,7 +217,7 @@ def nouveau_questionnaire(idConference):
 @app.route("/nouveauQuestionnaire", methods=['POST'])
 def nouveau_questionnaire_post():
     try:
-        # Construction des objets de base de données correspondants aux résultat du form
+        # Construction des objets de base de données correspondants aux résultats du form
         form = request.form
         process_creation_questionnaire_data(form)
     except Exception as error:
