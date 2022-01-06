@@ -9,7 +9,7 @@ def process_reponse_questionnaire(form):
     A partir d'une réponse de questionnaire, teste la validité de l'ensemble des facteurs
     et ajoute à la base de données l'ensemble des réponses au questionnaire
     :param form: Dictionnaire qui représente la réponse au questionnaire
-    :raise: Exception("message") - En cas de non validité d'un des paramètres
+    :raise: Exception("message","codeErreur") - En cas de non validité d'un des paramètres
     """
     try:
         error = "Le contenu du formulaire est mal construit"
@@ -57,6 +57,12 @@ def process_reponse_questionnaire(form):
 
 
 def process_creation_questionnaire_data(form):
+    """
+    A partir du formulaire de création de questionnaire, vérifie
+    sa validité, et ajoute à la base de données les différents tuples nécessaires.
+    :param form: Dictionnaire qui représente le questionnaire à créer
+    :raise: Exception("message","CodeErreur") - En cas de non validité d'un des paramètres
+    """
     try:
         # Cas d'erreur si la conférence correspondante n'est pas valide
         if Conference.query.filter_by(id=form["id_conf"]).count() == 0:

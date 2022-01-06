@@ -28,7 +28,7 @@ L'application est disponible en ligne avec le lien suivant : http://confcit.xyz/
 Bien que parfaitement fonctionnelle, cette version semble instable. En particulier si plusieurs utilisateurs y accèdent en simultanés
 
 
-### Convention pour les message de commits
+## Convention pour les messages de commits
 
 Afin de rendre les messages de commits plus clairs nous allons utiliser une version légerement modifiée des règles de nommage décrites dans ce dépot : https://github.com/ahmadawais/Emoji-Log/.
 *L'utilisation des emojis est facultative, c'est surtout ce qui suit qui compte.*
